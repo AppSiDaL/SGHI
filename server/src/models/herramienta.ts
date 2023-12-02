@@ -1,0 +1,44 @@
+const { Model, DataTypes } = require("sequelize");
+
+const { sequelize } = require("../utils/db");
+
+class Herramienta extends Model {}
+
+Herramienta.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    codigo: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    pieza: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    descripcion: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    fecha_modificacion: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    dibujo: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    underscored: true,
+    timestamps: false,
+    modelName: "herramientas",
+  }
+);
+export {};
+
+module.exports = Herramienta;
