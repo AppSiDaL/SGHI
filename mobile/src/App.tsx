@@ -1,10 +1,19 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Piezas from "./screens/piezas/Index";
+import Scanner from "./screens/qrScaner/index";
+const Stack = createStackNavigator();
 
-export default function App() {
+function App() {
   return (
-    <View>
-      <Text>App</Text>
-    </View>
-  )
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Piezas" component={Piezas} />
+        <Stack.Screen name="Scanner" component={Scanner} />
+        {/* Add more routes here */}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
+export default App;
