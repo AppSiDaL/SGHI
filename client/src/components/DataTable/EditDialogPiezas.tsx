@@ -73,8 +73,8 @@ export default function EditDialogPiezas({
       footer={productDialogFooter}
       onHide={hideDialog}
     >
-      <div className="flex">
-        <div className="field">
+      <div className="formgrid grid">
+        <div className="field col">
           <label htmlFor="orden" className="font-bold">
             Orden
           </label>
@@ -92,7 +92,7 @@ export default function EditDialogPiezas({
             <small className="p-error">Orden requerida.</small>
           )}
         </div>
-        <div className="field">
+        <div className="field col">
           <label htmlFor="codigo" className="font-bold">
             R-3
           </label>
@@ -111,8 +111,8 @@ export default function EditDialogPiezas({
           )}
         </div>
       </div>
-      <div className="flex">
-        <div className="field">
+      <div className="formgrid grid">
+        <div className="field col">
           <label htmlFor="#" className="font-bold">
             Numero Pieza
           </label>
@@ -130,7 +130,7 @@ export default function EditDialogPiezas({
             <small className="p-error">numero_pieza requerido.</small>
           )}
         </div>
-        <div className="field">
+        <div className="field col">
           <label htmlFor="cantidad" className="font-bold">
             Cantidad
           </label>
@@ -163,8 +163,8 @@ export default function EditDialogPiezas({
         />
       </div>
 
-      <div className="flex">
-        <div className="field">
+      <div className="formgrid grid">
+        <div className="field col">
           <label htmlFor="#" className="font-bold">
             Estado
           </label>
@@ -172,11 +172,10 @@ export default function EditDialogPiezas({
             value={estado}
             onChange={(e: DropdownChangeEvent) => setEstado(e.value)}
             options={estados}
-            placeholder="Area..."
-            className="w-full md:w-14rem"
+            placeholder="Estado..."
           />
         </div>
-        <div className="field">
+        <div className="field col">
           <label htmlFor="cantidad" className="font-bold">
             Area
           </label>
@@ -185,7 +184,6 @@ export default function EditDialogPiezas({
             onChange={(e: DropdownChangeEvent) => setArea(e.value)}
             options={areas}
             placeholder="Area..."
-            className="w-full md:w-14rem"
           />
         </div>
       </div>

@@ -1,4 +1,10 @@
-import { Route, Routes, Navigate,  useNavigate } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Piezas from "./pages/Piezas";
 import Herramientas from "./pages/Herramientas";
@@ -13,18 +19,28 @@ import ordenesService from "./services/ordenesService";
 
 export default function App() {
   const [user, setUser] = useState(null);
-  const navigator= useNavigate()
+  const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedUser");
+
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
       piezasService.setToken(user.token);
       herramientasService.setToken(user.token);
       ordenesService.setToken(user.token);
-      navigator("/")
+      if (location.pathname == "/login" || location.pathname == "/") {
+        navigate("/");
+      }
+      setIsLoading(false);
     }
   }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   if (!user) {
     return (
@@ -37,8 +53,8 @@ export default function App() {
 
   return (
     <div style={{ margin: 0 }}>
-      <Menu setUser={setUser}/>
-    <div style={{height:10}}/>
+      <Menu setUser={setUser} />
+      <div style={{ height: 10 }} />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/piezas" element={<Piezas />} />
