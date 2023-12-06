@@ -3,14 +3,26 @@ import { MenuItem } from "primereact/menuitem";
 import { Avatar } from "primereact/avatar";
 import { Link, useNavigate } from "react-router-dom";
 import IUSALogo from "/iusa-logo.webp";
-import React, { useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Menu } from "primereact/menu";
-
+import { PrimeReactContext } from "primereact/api";
+import { Button } from "primereact/button";
 interface NavBarProps {
   setUser: Function;
 }
 
 export default function NavBar({ setUser }: NavBarProps) {
+  const [theme, setTheme] = useState("dark");
+  const { changeTheme } = useContext(PrimeReactContext);
+  const changeMyTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    changeTheme?.(
+      `md-${theme}-indigo`,
+      `md-${newTheme}-indigo`,
+      "app-theme",
+      () => setTheme(newTheme)
+    );
+  };
   const navigator = useNavigate();
   const itemsData: MenuItem[] = [
     { label: "DashBoard", icon: "pi pi-fw pi-home", url: "/" },
@@ -27,10 +39,7 @@ export default function NavBar({ setUser }: NavBarProps) {
     template: (item, options) => {
       return (
         <div onClick={options.onClick}>
-          <Link
-            to={item.url ? item.url : "/404"}
-            className={options.className}
-          >
+          <Link to={item.url ? item.url : "/404"} className={options.className}>
             <i className={item.icon} />
             <span className={`ml-2`}>{item.label}</span>
           </Link>
@@ -90,6 +99,15 @@ export default function NavBar({ setUser }: NavBarProps) {
           ref={menuRight}
           id="popup_menu_right"
           popupAlignment="right"
+        />
+        <Button
+          icon={`pi pi-${theme === "light" ? "moon" : "sun"}`}
+          rounded
+          className="mr-2"
+          outlined
+          severity={`${theme === "light" ? "warning" : "info"}`}
+          aria-label="Bookmark"
+          onClick={() => changeMyTheme()}
         />
         <Avatar
           onClick={(event) => menuRight.current?.toggle(event)}

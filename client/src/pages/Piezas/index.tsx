@@ -96,8 +96,8 @@ export default function page() {
         <InputText
           type="date"
           disabled
-          style={{ width: 130 }}
-          className="text-green-400 p-inputtext-sm"
+          style={{ width: 130, color: "green", borderColor: "green" }}
+          className=" p-inputtext-sm"
           value={rowData.fecha_entrada}
         />
       ),
@@ -109,8 +109,8 @@ export default function page() {
         <InputText
           type="date"
           disabled
-          style={{ width: 130 }}
-          className="text-red-400 p-inputtext-sm"
+          style={{ width: 130, color: "red", borderColor: "red" }}
+          className=" p-inputtext-sm"
           value={rowData.fecha_salida}
         />
       ),
