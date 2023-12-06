@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import piezasService from "./services/piezasService";
 import herramientasService from "./services/herramientasService";
 import ordenesService from "./services/ordenesService";
+import ViewPiezas from "./components/Piezas/View";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -58,6 +59,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/piezas" element={<Piezas />} />
+        <Route path="/piezas/:id" element={<ViewPiezas />} />
         <Route path="/herramientas" element={<Herramientas />} />
         <Route path="/ordenes" element={<Ordenes />} />
         <Route path="/movimientos" element={<Movimientos />} />

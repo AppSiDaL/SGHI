@@ -18,6 +18,7 @@ import { ServiceProps } from "../../types/service";
 import EditDialogPiezas from "./EditDialogPiezas";
 import EditDialogOrdenes from "./EditDialogOrdenes";
 import EditDialogHerramientas from "./EditDialogHerramientas";
+import { useNavigate } from "react-router-dom";
 
 interface DataTableComponentProps {
   items: Herramienta[] | Part[] | Orden[];
@@ -51,6 +52,7 @@ export default function DataTableComponent({
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const toast = useRef<Toast>(null);
   const dt = useRef<DataTable<Herramienta[]>>(null);
+  const navigator = useNavigate();
 
   const openNew = () => {
     setItem(emptyItem);
@@ -176,6 +178,7 @@ export default function DataTableComponent({
         label: "Editar",
         icon: "pi pi-pencil",
         command: () => {
+          navigator(`${rowData.id}`);
           editProduct(rowData);
         },
       },
@@ -270,7 +273,6 @@ export default function DataTableComponent({
 
         <DataTable
           stripedRows
-          editMode="cell"
           scrollable
           scrollHeight="500px"
           ref={dt}
@@ -301,9 +303,6 @@ export default function DataTableComponent({
               header={column.header}
               body={column.body}
               sortable
-              editor={(options) => (
-                <InputText type="text" value={options.value} />
-              )}
             ></Column>
           ))}
           <Column

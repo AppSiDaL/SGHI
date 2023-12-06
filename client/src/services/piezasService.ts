@@ -13,6 +13,11 @@ const getItems = async () => {
   return request;
 };
 
+const getItem = async (id:string) => {
+  const request = await axios.get(`${url}/${id}`);
+  return request;
+};
+
 type newPart = Omit<Part, 'dias' | 'id'>;
 const createItem = async (pieza:newPart) => {
   const config = {
@@ -33,4 +38,4 @@ const removeItem = async (items: Part[]) => {
   return Promise.all(deleteRequests);
 };
 
-export default { getItems,setToken,name:"Pieza", createItem, removeItem };
+export default { getItems,setToken,name:"Pieza", createItem, removeItem,getItem };
