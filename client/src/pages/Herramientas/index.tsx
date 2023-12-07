@@ -37,8 +37,8 @@ export default function page() {
       body: undefined,
     },
     {
-      field: "pieza",
-      header: "pieza",
+      field: "numero_pieza",
+      header: "#",
       body: undefined,
     },
     {

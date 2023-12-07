@@ -20,6 +20,7 @@ import ViewPiezas from "./components/Piezas/View";
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const [theme,setTheme] = useState("dark")
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
@@ -54,11 +55,11 @@ export default function App() {
 
   return (
     <div style={{ margin: 0 }}>
-      <Menu setUser={setUser} />
+      <Menu setUser={setUser} theme={theme} setTheme={setTheme} />
       <div style={{ height: 10 }} />
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/piezas" element={<Piezas />} />
+        <Route path="/piezas" element={<Piezas theme={theme}/>} />
         <Route path="/piezas/:id" element={<ViewPiezas />} />
         <Route path="/herramientas" element={<Herramientas />} />
         <Route path="/ordenes" element={<Ordenes />} />

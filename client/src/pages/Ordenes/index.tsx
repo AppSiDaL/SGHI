@@ -5,17 +5,19 @@ import { Orden } from "../../types/orden";
 import { ColumnProps } from "../../types/column";
 import { Part } from "../../types/piezas";
 import { Herramienta } from "../../types/herramientas";
+import { Tag } from "primereact/tag";
 let emptyItem: Orden = {
   id: 0,
+  orden: 0,
   r3: 0,
   departamento: "",
   codigo: "",
   estado: "",
-  avance: "",
-  cotizado: 0,
-  material: 0,
-  manoObra: 0,
-  total: 0,
+  avance: 0,
+  costo_cotizado: 0,
+  costo_material: 0,
+  costo_mano_obra: 0,
+  costo_total: 0,
   fecha_solicitud: "",
   fecha_autorizacion: "",
   fecha_salida: "",
@@ -33,6 +35,21 @@ export default function index() {
       })
       .catch((err) => console.log(err));
   }, []);
+  const getSeverity = (product: Orden) => {
+    switch (product.estado.toLowerCase()) {
+      case "procesando":
+        return "success";
+
+      case "ajustando":
+        return "warning";
+
+      case "detenido":
+        return "danger";
+
+      default:
+        return null;
+    }
+  };
   const columns: ColumnProps[] = [
     {
       field: "id",
@@ -47,42 +64,89 @@ export default function index() {
     {
       field: "departamento",
       header: "Depto.",
-      body: undefined,
+      body: (rowData: Orden) => (
+        <div style={{ textTransform: "capitalize" }}>
+          {" "}
+          {rowData.departamento}{" "}
+        </div>
+      ),
     },
     {
       field: "codigo",
-      header: "Codigo",
+      header: "Code",
       body: undefined,
     },
     {
       field: "estado",
       header: "Estado",
-      body: undefined,
+      body: (rowData: Orden) => (
+        <Tag
+          value={rowData.estado}
+          className="capitalize"
+          severity={getSeverity(rowData)}
+        ></Tag>
+      ),
     },
     {
       field: "avance",
       header: "%",
-      body: undefined,
+      body: (rowData: Orden) => <>{rowData.avance + "%"}</>,
     },
     {
-      field: "cotizado",
+      field: "costo_cotizado",
       header: "$",
-      body: undefined,
+      body: (rowData: Orden) => (
+        <>
+          {rowData.costo_cotizado.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })}
+        </>
+      ),
     },
     {
-      field: "material",
+      field: "costo_material",
       header: "$MA",
-      body: undefined,
+      body: (rowData: Orden) => (
+        <>
+          {rowData.costo_material.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })}
+        </>
+      ),
     },
     {
-      field: "mano_obra",
+      field: "costo_mano_obra",
       header: "$MO",
-      body: undefined,
+      body: (rowData: Orden) => (
+        <>
+          {rowData.costo_mano_obra.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })}
+        </>
+      ),
     },
     {
-      field: "total",
+      field: "costo_total",
       header: "$T",
-      body: undefined,
+      body: (rowData: Orden) => (
+        <>
+          {rowData.costo_total.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })}
+        </>
+      ),
     },
     {
       field: "fecha_solicitud",
@@ -101,12 +165,12 @@ export default function index() {
     },
     {
       field: "dias",
-      header: "Dias",
+      header: "D",
       body: undefined,
     },
     {
       field: "prioridad",
-      header: "Prioridad",
+      header: "P",
       body: undefined,
     },
   ];

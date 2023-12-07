@@ -3,16 +3,17 @@ import { MenuItem } from "primereact/menuitem";
 import { Avatar } from "primereact/avatar";
 import { Link, useNavigate } from "react-router-dom";
 import IUSALogo from "/iusa-logo.webp";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef } from "react";
 import { Menu } from "primereact/menu";
 import { PrimeReactContext } from "primereact/api";
 import { Button } from "primereact/button";
 interface NavBarProps {
+  setTheme: Function;
+  theme: string;
   setUser: Function;
 }
 
-export default function NavBar({ setUser }: NavBarProps) {
-  const [theme, setTheme] = useState("dark");
+export default function NavBar({ setUser,setTheme,theme }: NavBarProps) {
   const { changeTheme } = useContext(PrimeReactContext);
   const changeMyTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";

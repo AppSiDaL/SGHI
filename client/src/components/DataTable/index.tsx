@@ -125,6 +125,7 @@ export default function DataTableComponent({
         <Button
           label="Nuevo"
           icon="pi pi-plus"
+          style={{ backgroundColor: "#00C200" }}
           severity="success"
           onClick={openNew}
         />
