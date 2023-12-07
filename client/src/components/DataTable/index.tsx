@@ -19,17 +19,18 @@ import EditDialogPiezas from "./EditDialogPiezas";
 import EditDialogOrdenes from "./EditDialogOrdenes";
 import EditDialogHerramientas from "./EditDialogHerramientas";
 import { useNavigate } from "react-router-dom";
+import { Movimiento } from "../../types/movimientos";
 
 interface DataTableComponentProps {
-  items: Herramienta[] | Part[] | Orden[];
+  items: Herramienta[] | Part[] | Orden[] | Movimiento[];
   setItems: Function;
   columns: ColumnProps[];
   visiblePDF?: boolean;
   setVisiblePDF?: Function;
-  item: Herramienta | Part | Orden;
+  item: Herramienta | Part | Orden | Movimiento;
   setItem: Function;
   service: ServiceProps;
-  emptyItem: Herramienta | Part | Orden;
+  emptyItem: Herramienta | Part | Orden | Movimiento;
 }
 export default function DataTableComponent({
   items,

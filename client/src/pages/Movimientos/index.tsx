@@ -1,20 +1,29 @@
 import { useEffect, useState } from "react";
 import DataTableComponent from "../../components/DataTable";
 import movimientosService from "../../services/movimientosService";
-import { Herramienta } from "../../types/herramientas";
 import { ColumnProps } from "../../types/column";
-import { Part } from "../../types/piezas";
-let emptyItem: Herramienta = {
+import { Movimiento } from "../../types/movimientos";
+let emptyItem: Movimiento = {
   id: 0,
-  codigo: "",
-  pieza: "",
-  descripcion: "",
-  fecha_modificacion: "",
-  dibujo: "",
+  m_1: "",
+  m_2: "",
+  m_3: "",
+  m_4: "",
+  m_5: "",
+  m_6: "",
+  m_7: "",
+  m_8: "",
+  m_9: "",
+  m_10: "",
+  m_11: "",
+  m_12: "",
+  m_13: "",
+  m_14: "",
+  m_15: "",
 };
 export default function page() {
-  const [items, setItems] = useState<Herramienta[]>([]);
-  const [item, setItem] = useState<Herramienta | Part>(emptyItem);
+  const [items, setItems] = useState<Movimiento[]>([]);
+  const [item, setItem] = useState<Movimiento>(emptyItem);
   useEffect(() => {
     movimientosService
       .getItems()
@@ -33,17 +42,41 @@ export default function page() {
     {
       field: "m_1",
       header: "1",
-      body: undefined,
+      body: (rowData: Movimiento): any => {
+        const trimedString = rowData.m_1.split("|");
+        return (
+          <div>
+            <p style={{ color: "green" }}>{trimedString[0]}</p>
+            {trimedString[1]}
+          </div>
+        );
+      },
     },
     {
       field: "m_2",
       header: "2",
-      body: undefined,
+      body: (rowData: Movimiento): any => {
+        const trimedString = rowData.m_2.split("|");
+        return (
+          <div>
+            <p style={{ color: "green" }}>{trimedString[0]}</p>
+            {trimedString[1]}
+          </div>
+        );
+      },
     },
     {
       field: "m_3",
       header: "3",
-      body: undefined,
+      body: (rowData: Movimiento): any => {
+        const trimedString = rowData.m_3.split("|");
+        return (
+          <div>
+            <p style={{ color: "green" }}>{trimedString[0]}</p>
+            {trimedString[1]}
+          </div>
+        );
+      },
     },
     {
       field: "m_4",
@@ -106,6 +139,7 @@ export default function page() {
       body: undefined,
     },
   ];
+
   return (
     <>
       <DataTableComponent

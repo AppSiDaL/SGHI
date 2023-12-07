@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import piezasService from "../../services/piezasService";
-import { Part } from "../../types/piezas";
+import { PartDraw } from "../../types/piezas";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -10,7 +10,7 @@ export default function View() {
   const [isEditing, setIsEditing] = useState(false);
 
   const { id } = useParams<{ id: string }>();
-  const [pieza, setPieza] = useState<Part>();
+  const [pieza, setPieza] = useState<PartDraw>();
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     if (id) {
@@ -175,7 +175,7 @@ export default function View() {
         <div className="col">
           <object
             style={{ width: "100%", height: "100%" }}
-            data="https://www.africau.edu/images/default/sample.pdf"
+            data={pieza?.herramienta.dibujo}
             type="application/pdf"
           ></object>
         </div>

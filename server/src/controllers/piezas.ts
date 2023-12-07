@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { CustonRequest } from "../types";
+const { Herramienta, Orden } = require("../models");
 const middleware = require("../middleware");
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
@@ -10,7 +11,6 @@ router.get("/", async (_req: Request, res: Response) => {
   const piezas = await Pieza.findAll();
   res.json(piezas);
 });
-
 
 router.post(
   "/",
@@ -37,9 +37,15 @@ router.post(
 );
 
 router.get("/:id", async (req: Request, res: Response) => {
-  const pieza = await Pieza.findByPk(req.params.id);
+  const pieza = await Pieza.findByPk(req.params.id, {
+    include: [
+      {
+        model: Herramienta,
+      },
+    ],
+  });
   if (pieza) {
-    res.json(pieza);
+    res.status(200).json(pieza);
   } else {
     res.status(404).end();
   }
