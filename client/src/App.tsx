@@ -20,7 +20,7 @@ import ViewPiezas from "./components/Piezas/View";
 
 export default function App() {
   const [user, setUser] = useState(null);
-  const [theme,setTheme] = useState("dark")
+  const [theme, setTheme] = useState("dark");
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,6 +36,8 @@ export default function App() {
       if (location.pathname == "/login" || location.pathname == "/") {
         navigate("/");
       }
+      setIsLoading(false);
+    } else {
       setIsLoading(false);
     }
   }, []);
@@ -59,7 +61,7 @@ export default function App() {
       <div style={{ height: 10 }} />
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/piezas" element={<Piezas theme={theme}/>} />
+        <Route path="/piezas" element={<Piezas theme={theme} />} />
         <Route path="/piezas/:id" element={<ViewPiezas />} />
         <Route path="/herramientas" element={<Herramientas />} />
         <Route path="/ordenes" element={<Ordenes />} />

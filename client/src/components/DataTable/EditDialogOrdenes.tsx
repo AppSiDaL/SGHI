@@ -42,7 +42,7 @@ export default function EditDialogPiezas({
     setSubmitted(false);
     setProductDialog(false);
   };
-  const saveOrden= async () => {
+  const saveOrden = async () => {
     const newOrden = {
       orden,
       r3,
@@ -50,10 +50,10 @@ export default function EditDialogPiezas({
       codigo,
       estado,
       avance,
-      cotizado,
-      material: costoMaterial,
-      manoObra: manoObra,
-      total,
+      costo_cotizado: cotizado,
+      costo_material: costoMaterial,
+      costo_mano_obra: manoObra,
+      costo_total: total,
       fecha_solicitud: solicitud,
       fecha_autorizacion: autorizacion,
       fecha_salida: salida,
@@ -62,7 +62,7 @@ export default function EditDialogPiezas({
     const response = await ordenesService.createItem(newOrden);
     console.log(response);
     setSubmitted(true);
-  }
+  };
 
   const productDialogFooter = (
     <React.Fragment>
@@ -71,7 +71,7 @@ export default function EditDialogPiezas({
     </React.Fragment>
   );
 
-  const estados: any = ["procesando","ajustando","terminado"];
+  const estados: any = ["procesando", "ajustando", "terminado"];
 
   return (
     <Dialog
