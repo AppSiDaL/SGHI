@@ -12,7 +12,7 @@ const ordenesRouter = require("./controllers/ordenes");
 const movimientosRouter = require("./controllers/movimientos");
 const loginRouter = require("./controllers/login");
 const usuariosRouter = require("./controllers/users");
-
+app.use(express.static('dist'))
 app.use(express.json());
 app.use(cors());
 app.use(middleware.addToken)
@@ -25,6 +25,7 @@ app.use("/api/login", loginRouter);
 app.use("/api/usuarios", usuariosRouter);
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
+
 
 const start = async () => {
   await connectToDatabase();
