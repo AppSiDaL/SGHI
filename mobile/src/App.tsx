@@ -2,7 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Piezas from "./screens/piezas/Index";
-import Scanner from "./screens/qrScaner/index";
+import Scanner from "./screens/qrScaner/Index";
 const Stack = createStackNavigator();
 
 function App() {

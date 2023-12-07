@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Part } from "../types/piezas";
-const url: string = "http://172.16.73.43:3001/api/piezas";
+const url: string = "http://172.29.94.221:3001/api/piezas";
 
 let token:any= null;
 
