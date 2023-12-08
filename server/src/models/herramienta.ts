@@ -15,7 +15,7 @@ Herramienta.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    pieza: {
+    numero_pieza: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
@@ -24,7 +24,7 @@ Herramienta.init(
       allowNull: false,
     },
     fecha_modificacion: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     dibujo: {

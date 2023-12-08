@@ -11,6 +11,10 @@ Orden.init(
       primaryKey: true,
       autoIncrement: true,
     },
+    orden:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     r3: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -31,32 +35,32 @@ Orden.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    cotizado: {
+    costo_cotizado: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    material: {
+    costo_material: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    mano_obra: {
+    costo_mano_obra: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    total: {
+    costo_total: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
     fecha_solicitud: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     fecha_autorizacion: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true,
     },
     fecha_salida: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true,
     },
     dias: {

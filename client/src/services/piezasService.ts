@@ -1,10 +1,11 @@
 import axios from "axios";
 import { Part } from "../types/piezas";
-const url: string = "http://localhost:3001/api/piezas";
+import { url as baseURL } from "../utils";
+const url = baseURL + "/piezas";
 
-let token:any= null;
+let token: any = null;
 
-const setToken = (newToken:String) => {
+const setToken = (newToken: String) => {
   token = `Bearer ${newToken}`;
 };
 
@@ -13,8 +14,13 @@ const getItems = async () => {
   return request;
 };
 
-type newPart = Omit<Part, 'dias' | 'id'>;
-const createItem = async (pieza:newPart) => {
+const getItem = async (id: string) => {
+  const request = await axios.get(`${url}/${id}`);
+  return request;
+};
+
+type newPart = Omit<Part, "dias" | "id">;
+const createItem = async (pieza: newPart) => {
   const config = {
     headers: { Authorization: token },
   };
@@ -26,11 +32,18 @@ const removeItem = async (items: Part[]) => {
   const config = {
     headers: { Authorization: token },
   };
-  const deleteRequests = items.map(async item => {
+  const deleteRequests = items.map(async (item) => {
     const response = await axios.delete(`${url}/${item.id}`, config);
     return response;
   });
   return Promise.all(deleteRequests);
 };
 
-export default { getItems,setToken,name:"Pieza", createItem, removeItem };
+export default {
+  getItems,
+  setToken,
+  name: "Pieza",
+  createItem,
+  removeItem,
+  getItem,
+};

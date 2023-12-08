@@ -20,7 +20,10 @@ let emptyItem: Part = {
   dias: 0,
   observaciones: "",
 };
-export default function page() {
+interface piezaPageProps {
+  theme: string;
+}
+export default function page({ theme }: piezaPageProps) {
   const [items, setItems] = useState<Part[]>([]);
   const [item, setItem] = useState<Herramienta | Part>(emptyItem);
   useEffect(() => {
@@ -87,7 +90,9 @@ export default function page() {
     {
       field: "area",
       header: "Area",
-      body: undefined,
+      body: (rowData: Part) => (
+        <div style={{ textTransform: "capitalize" }}>{rowData.area}</div>
+      ),
     },
     {
       field: "fecha_entrada",
@@ -96,8 +101,14 @@ export default function page() {
         <InputText
           type="date"
           disabled
-          style={{ width: 130 }}
-          className="text-green-400 p-inputtext-sm"
+          style={{
+            width: 130,
+            color: theme === "dark" ? "#00C200" : "#0000FF",
+            borderColor: theme === "dark" ? "#00C200" : "#0000FF",
+            borderWidth: 2,
+            fontWeight: "bold",
+          }}
+          className=" p-inputtext-sm"
           value={rowData.fecha_entrada}
         />
       ),
@@ -109,8 +120,14 @@ export default function page() {
         <InputText
           type="date"
           disabled
-          style={{ width: 130 }}
-          className="text-red-400 p-inputtext-sm"
+          style={{
+            width: 130,
+            color: "#FF0000",
+            borderColor: "#FF0000",
+            borderWidth: 2,
+            fontWeight: "bold",
+          }}
+          className=" p-inputtext-sm"
           value={rowData.fecha_salida}
         />
       ),

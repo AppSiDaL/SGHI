@@ -1,7 +1,7 @@
 import axios from "axios";
 import { credentials } from "../types/user";
-const url: string = "http://localhost:3001/api/login";
-
+import { url as baseURL } from "../utils";
+const url = baseURL + "/login";
 const loginUser = async (credentials: credentials) => {
   const request = await axios.post(url, credentials);
   return request.data;

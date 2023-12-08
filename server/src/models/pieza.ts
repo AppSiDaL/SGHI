@@ -12,7 +12,7 @@ Pieza.init(
       autoIncrement: true,
     },
     orden: {
-      type: DataTypes.TEXT,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     codigo: {
@@ -28,7 +28,7 @@ Pieza.init(
       allowNull: false,
     },
     cantidad: {
-      type: DataTypes.TEXT,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     estado: {
@@ -40,15 +40,15 @@ Pieza.init(
       allowNull: false,
     },
     fecha_entrada: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     fecha_salida: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     dias: {
-      type: DataTypes.TEXT,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     observaciones: {
@@ -60,7 +60,7 @@ Pieza.init(
     sequelize,
     underscored: true,
     timestamps: false,
-    modelName: "pieza",
+    modelName: "piezas",
   }
 );
 export {};

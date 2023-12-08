@@ -1,6 +1,8 @@
 import axios from "axios";
 import { Orden } from "../types/orden";
-const url: string = "http://localhost:3001/api/ordenes";
+import { url as baseURL } from "../utils";
+const url = baseURL + "/ordenes";
+
 
 let token:any= null;
 

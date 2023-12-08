@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Herramienta } from "../types/herramientas";
-const url: string = "http://localhost:3001/api/herramientas";
+import { url as baseURL } from "../utils";
+const url = baseURL + "/herramientas";
 
 let token: any = null;
 
@@ -12,7 +13,7 @@ const getItems = async () => {
   const request = await axios.get(url);
   return request;
 };
-type newHerramienta = Omit<Herramienta,  "fecha_modificacion"|'id'>;
+type newHerramienta = Omit<Herramienta, "fecha_modificacion" | "id">;
 
 const createItem = async (pieza: newHerramienta) => {
   const config = {
@@ -33,4 +34,10 @@ const removeItem = async (items: Herramienta[]) => {
   return Promise.all(deleteRequests);
 };
 
-export default { getItems,name:"Herramienta", createItem, removeItem, setToken };
+export default {
+  getItems,
+  name: "Herramienta",
+  createItem,
+  removeItem,
+  setToken,
+};

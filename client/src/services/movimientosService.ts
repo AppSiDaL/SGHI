@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Movimiento } from "../types/movimientos";
-const url: string = "http://localhost:3001/api/movimientos";
-
+import { url as baseURL } from "../utils";
+const url = baseURL + "/movimientos";
 const getItems = async () => {
   const request = await axios.get(url);
   return request;
