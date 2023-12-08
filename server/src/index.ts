@@ -1,4 +1,7 @@
+import { Request, Response } from "express";
+import * as path from 'path';
 const express = require("express");
+
 require("express-async-errors");
 const middleware = require("./middleware");
 const app = express();
@@ -23,6 +26,11 @@ app.use("/api/ordenes", ordenesRouter);
 app.use("/api/movimientos", movimientosRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/usuarios", usuariosRouter);
+
+app.get('*', (req:Request, res:Response) => {
+  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+});
+
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
