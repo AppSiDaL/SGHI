@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Part } from "../types/piezas";
-const url: string = "http://172.29.94.221:3001/api/piezas";
+const url: string = "https://sgh-iusa.onrender.com/api/piezas";
 
 let token:any= null;
 

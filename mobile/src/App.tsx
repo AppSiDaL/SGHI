@@ -1,19 +1,29 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import Piezas from "./screens/piezas/Index";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Piezas from "./screens/Piezas/Index";
 import Scanner from "./screens/qrScaner/Index";
-const Stack = createStackNavigator();
+
+const Tab = createBottomTabNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Piezas" component={Piezas} />
-        <Stack.Screen name="Scanner" component={Scanner} />
+      <Tab.Navigator initialRouteName="Home">
+        <Tab.Screen
+          name="Piezas"
+          component={Piezas}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen
+          name="Scanner"
+          component={Scanner}
+          options={{ headerShown: false }}
+        />
         {/* Add more routes here */}
-      </Stack.Navigator>
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
+
 export default App;
