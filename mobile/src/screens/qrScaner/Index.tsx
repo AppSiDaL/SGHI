@@ -1,5 +1,5 @@
-import { View } from "react-native";
-import { useQuery } from "react-query";
+import { Alert, View } from "react-native";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import QrScaner from "../../components/QrScanner/Index";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -30,16 +30,21 @@ export default function Calculadora() {
     }
   };
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation((newPart:any) => piezasService.changePart(newPart.id, newPart), {
+    onSuccess: (data) => {
+      Alert.alert("Pieza actualizada");
+      queryClient.invalidateQueries('piezas');
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+  
   const savePieza = () => {
     const modifiedPart = { ...pieza, area };
-    piezasService
-      .changePart(pieza?.id, modifiedPart)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    mutation.mutate(modifiedPart);
   };
 
   return (
