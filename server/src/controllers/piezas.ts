@@ -71,7 +71,7 @@ router.delete(
 router.put("/:id", async (req: Request, res: Response) => {
   const pieza = await Pieza.findByPk(req.params.id);
   if (pieza) {
-    pieza.important = req.body.important;
+    pieza.observaciones = req.body.area;
     await pieza.save();
     res.json(pieza);
   } else {

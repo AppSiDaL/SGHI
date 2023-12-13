@@ -3,13 +3,11 @@ import { Table, Row, Rows, TableWrapper } from "react-native-reanimated-table";
 
 interface TableComponentProps {
   piezas: any;
-  setPiezas: Function;
   titles: Array<string>;
 }
 
 export default function TableComponent({
   piezas,
-  setPiezas,
   titles,
 }: TableComponentProps) {
   return (

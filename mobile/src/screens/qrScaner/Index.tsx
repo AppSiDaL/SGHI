@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
-import { BarCodeScanner } from "expo-barcode-scanner";
-
-export default function App() {
-  const [hasPermission, setHasPermission] = useState(false);
+import { View } from "react-native";
+import { useQuery } from "react-query";
+import QrScaner from "../../components/QrScanner/Index";
+import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import type { Part } from "../../types/piezas";
+import { Button, Card, Input, Text } from "@rneui/themed";
+import DropDownAreas from "../../components/QrScanner/DropDownAreas";
+import { Entypo } from "@expo/vector-icons";
+import piezasService from "../../services/piezasService";
+export default function Calculadora() {
+  const [area, setArea] = useState<string | null>(null);
   const [scanned, setScanned] = useState(false);
-
-  useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    };
-
-    getBarCodeScannerPermissions();
-  }, []);
+  const [finded, setFinded] = useState(false);
+  const [pieza, setPieza] = useState<Part | null>(null);
+  const { data: piezas } = useQuery<Part[]>("piezas");
 
   const handleBarCodeScanned = ({
     type,
@@ -23,33 +23,106 @@ export default function App() {
     data: string;
   }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    const piezaFiltered = piezas?.filter((pieza) => pieza.id === Number(data));
+    if (data && piezaFiltered) {
+      setPieza(piezaFiltered[0]);
+      setFinded(true);
+    }
   };
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  const savePieza = () => {
+    const modifiedPart = { ...pieza, area };
+    piezasService
+      .changePart(pieza?.id, modifiedPart)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
-    <View style={styles.container}>
-      <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-      />
-      {scanned && (
-        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
-      )}
-    </View>
+    <>
+      <View
+        style={{
+          paddingTop: 40,
+          backgroundColor: "#2C70DB",
+          alignItems: "center",
+          height: 70,
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text style={{ color: "white", marginLeft: 15 }}>Scanner</Text>
+        {scanned && (
+          <Ionicons
+            name="reload"
+            onPress={() => {
+              setScanned(false);
+              setFinded(false);
+            }}
+            size={24}
+            color="black"
+            style={{ marginRight: 15 }}
+          />
+        )}
+      </View>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        {finded ? (
+          <>
+            <Card>
+              <Text h4>Pieza ID: {pieza?.id}</Text>
+              <Text>OT: {pieza?.orden}</Text>
+              <Text>Codigo: {pieza?.codigo}</Text>
+              <Text style={{ fontWeight: "bold" }}>{pieza?.descripcion}</Text>
+              <Text>{pieza?.cantidad} Pzas</Text>
+              <Text style={{ textTransform: "capitalize" }}>
+                {pieza?.estado}
+              </Text>
+              <Text>{pieza?.fecha_entrada}</Text>
+              <Input
+                style={{
+                  textTransform: "capitalize",
+                  marginTop: 20,
+                  textAlign: "center",
+                }}
+                placeholder={pieza?.area}
+                value={pieza?.area}
+                disabled
+              />
+              <Entypo
+                style={{ textAlign: "center" }}
+                name="select-arrows"
+                size={24}
+                color="black"
+              />
+              <DropDownAreas setValue={setArea} value={area} />
+              <Button radius={"sm"} type="solid" onPress={savePieza}>
+                Guardar
+                <Entypo
+                  style={{ textAlign: "center" }}
+                  name="save"
+                  size={24}
+                  color="white"
+                />
+              </Button>
+            </Card>
+          </>
+        ) : (
+          <QrScaner
+            scanned={scanned}
+            setScanned={setScanned}
+            handleBarCodeScanned={handleBarCodeScanned}
+          />
+        )}
+      </View>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-});
