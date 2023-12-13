@@ -61,7 +61,7 @@ router.delete("/:id", middleware.userExtractor, (req, res) => __awaiter(void 0, 
 router.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pieza = yield Pieza.findByPk(req.params.id);
     if (pieza) {
-        pieza.important = req.body.important;
+        pieza.observaciones = req.body.area;
         yield pieza.save();
         res.json(pieza);
     }
