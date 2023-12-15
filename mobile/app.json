@@ -4,7 +4,7 @@
     "slug": "SGHI",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/playsote.png",
+    "icon": "./assets/playstore.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/ic_launcher.png",
@@ -20,17 +20,17 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/playsote.png",
+        "foregroundImage": "./assets/playstore.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.appsidal.mobile"
     },
     "web": {
-      "favicon": "./assets/playsote.png"
+      "favicon": "./assets/playstore.png"
     },
     "extra": {
       "eas": {
-        "projectId": "e79074af-1129-4b2e-a094-b20af76916d5"
+        "projectId": "e486d304-3b0c-4589-a965-45fbbe024ef2"
       }
     }
   }
