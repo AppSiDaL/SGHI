@@ -1,8 +1,15 @@
-import { StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { Table, Row, TableWrapper, Cell } from "react-native-reanimated-table";
 import React, { useState } from "react";
 import EditPiezaModal from "../QrScanner/EditPiezaModal";
 import { Part } from "../../types/piezas";
+import { Icon, Input } from "@rneui/themed";
 
 interface TableComponentProps {
   piezas: any;
@@ -31,7 +38,6 @@ export default function TableComponent({
   const handleButtonPress = (rowData: any) => {
     setVisible(true);
     const piezaFinded = piezas.find((pieza: Part) => pieza.id === rowData[5]);
-    console.log(piezaFinded);
     setPieza(piezaFinded);
   };
 
@@ -47,52 +53,57 @@ export default function TableComponent({
         />
       )}
       <View style={styles.container}>
-        <TextInput
-          style={styles.input}
+        <Input
+          leftIcon={<Icon name="search" size={24} color="black" />}
           onChangeText={setSearchTerm}
           value={searchTerm}
           placeholder="Buscar..."
         />
-        <Table borderStyle={{ borderWidth: 1 }}>
-          <Row
-            data={titles}
-            flexArr={flexArr}
-            style={styles.head}
-            textStyle={styles.text}
-          />
-          {filteredPiezas.map((rowData: any, index: number) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handleButtonPress(rowData)}
-            >
-              <TableWrapper style={styles.row}>
-                {rowData
-                  .filter(
-                    (_: any, cellIndex: number) =>
-                      cellIndex < rowData.length - 1
-                  )
-                  .map((cellData: any, cellIndex: number) => (
-                    <View key={cellIndex} style={{ flex: flexArr[cellIndex] }}>
-                      <Cell data={cellData} textStyle={styles.text} />
-                    </View>
-                  ))}
-              </TableWrapper>
-            </TouchableOpacity>
-          ))}
-        </Table>
+        <ScrollView>
+          <Table borderStyle={{ borderWidth: 1 }}>
+            <Row
+              data={titles}
+              flexArr={flexArr}
+              style={styles.head}
+              textStyle={styles.text}
+            />
+            {filteredPiezas.map((rowData: any, index: number) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleButtonPress(rowData)}
+              >
+                <TableWrapper style={styles.row}>
+                  {rowData
+                    .filter(
+                      (_: any, cellIndex: number) =>
+                        cellIndex < rowData.length - 1
+                    )
+                    .map((cellData: any, cellIndex: number) => (
+                      <View
+                        key={cellIndex}
+                        style={{ flex: flexArr[cellIndex], borderWidth: 0.7 }}
+                      >
+                        <Cell data={cellData} textStyle={styles.text} />
+                      </View>
+                    ))}
+                </TableWrapper>
+              </TouchableOpacity>
+            ))}
+          </Table>
+        </ScrollView>
       </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: "#fff" },
-  head: { height: 40, backgroundColor: "#f1f8ff" },
-  text: { margin: 6 },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
+  container: {
+    flex: 1,
+    paddingRight: 10,
+    paddingLeft: 10,
+    backgroundColor: "#fff",
   },
+  head: { height: 40, backgroundColor: "#01BDFF" },
+  text: { margin: 6 },
   row: { flexDirection: "row" },
 });

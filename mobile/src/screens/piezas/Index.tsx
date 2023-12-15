@@ -6,7 +6,7 @@ import TableComponent from "../../components/Table/Index";
 import TableSkeleton from "../../components/Table/TableSkeleton";
 
 export default function Index() {
-  const titles = ["Orden", "Codigo", "Descrip.", "QT", "Area"];
+  const titles = ["Orden", "Code", "Descrip.", "Qt", "Area"];
 
   const {
     data: piezas,
@@ -18,20 +18,20 @@ export default function Index() {
     })
   );
 
-
   if (isLoading) {
     return (
       <>
-        <View>
-          <Text
-            style={{
-              textAlign: "center",
-              fontSize: 30,
-              paddingTop: 30,
-            }}
-          >
-            Piezas
-          </Text>
+        <View
+          style={{
+            paddingTop: 40,
+            backgroundColor: "#2C70DB",
+            alignItems: "center",
+            height: 70,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text style={{ color: "white", marginLeft: 15 }}>Piezas</Text>
         </View>
         <TableSkeleton />
       </>
@@ -44,21 +44,19 @@ export default function Index() {
 
   return (
     <>
-      <View>
-        <Text
-          style={{
-            textAlign: "center",
-            fontSize: 30,
-            paddingTop: 30,
-            backgroundColor: "#fff",
-          }}
-        >
-          Piezas
-        </Text>
+      <View
+        style={{
+          paddingTop: 40,
+          backgroundColor: "#2C70DB",
+          alignItems: "center",
+          height: 70,
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text style={{ color: "white", marginLeft: 15 }}>Piezas</Text>
       </View>
-      <ScrollView>
-        <TableComponent piezas={piezas} titles={titles} />
-      </ScrollView>
+      <TableComponent piezas={piezas} titles={titles} />
     </>
   );
 }

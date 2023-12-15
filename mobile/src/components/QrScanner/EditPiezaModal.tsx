@@ -1,10 +1,10 @@
 import { Button, Card, Input, Text } from "@rneui/themed";
 import React, { useState } from "react";
-import { Alert, Modal, Pressable, StyleSheet, View } from "react-native";
+import { Alert, Modal, StyleSheet, View } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { Part } from "../../types/piezas";
 import DropDownAreas from "./DropDownAreas";
-import { QueryClient, useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import piezasService from "../../services/piezasService";
 
 interface EditPiezaModalProps {
@@ -50,7 +50,6 @@ export default function EditPiezaModal({
         transparent={true}
         visible={visible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
           setVisible(!visible);
         }}
       >
@@ -91,7 +90,7 @@ export default function EditPiezaModal({
                 color="white"
               />
             </Button>
-            <Button radius={"sm"} type="solid" onPress={closeModal}>
+            <Button radius={"sm"} type="solid" onPress={closeModal} color="red">
               Descartar
               <Entypo
                 style={{ textAlign: "center" }}
