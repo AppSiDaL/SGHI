@@ -1,11 +1,12 @@
 import { useQuery } from "react-query";
 import piezasService from "../../services/piezasService";
 import { Part } from "../../types/piezas";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import TableComponent from "../../components/Table/Index";
+import TableSkeleton from "../../components/Table/TableSkeleton";
 
 export default function Index() {
-  const titles = ["Orden", "Codigo", "Descrip.", "QTY", "Area"];
+  const titles = ["Orden", "Codigo", "Descrip.", "QT", "Area"];
 
   const {
     data: piezas,
@@ -16,16 +17,25 @@ export default function Index() {
       return response.data;
     })
   );
-  const piezasMapped = piezas?.map((item: Part) => [
-    item.orden,
-    item.codigo,
-    item.descripcion,
-    item.cantidad,
-    item.area,
-  ]);
+
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <>
+        <View>
+          <Text
+            style={{
+              textAlign: "center",
+              fontSize: 30,
+              paddingTop: 30,
+            }}
+          >
+            Piezas
+          </Text>
+        </View>
+        <TableSkeleton />
+      </>
+    );
   }
 
   if (error) {
@@ -40,12 +50,15 @@ export default function Index() {
             textAlign: "center",
             fontSize: 30,
             paddingTop: 30,
+            backgroundColor: "#fff",
           }}
         >
           Piezas
         </Text>
       </View>
-      <TableComponent piezas={piezasMapped} titles={titles} />
+      <ScrollView>
+        <TableComponent piezas={piezas} titles={titles} />
+      </ScrollView>
     </>
   );
 }

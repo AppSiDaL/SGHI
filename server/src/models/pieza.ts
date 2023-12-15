@@ -17,7 +17,7 @@ Pieza.init(
     },
     codigo: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
     numero_pieza: {
       type: DataTypes.TEXT,
@@ -53,7 +53,7 @@ Pieza.init(
     },
     observaciones: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
