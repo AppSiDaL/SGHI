@@ -31,7 +31,7 @@ export default function EditDialogPiezas({
   };
   const saveHerramienta = () => {
     const data = {
-      pieza: numeroPieza,
+      numero_pieza: numeroPieza,
       codigo: codigo,
       descripcion: descripcion,
       dibujo: (response as any).url_preview,

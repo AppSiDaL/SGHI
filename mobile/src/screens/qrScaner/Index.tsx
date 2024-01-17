@@ -10,7 +10,7 @@ import EditPiezaModal from "../../components/QrScanner/EditPiezaModal";
 export default function Calculadora() {
   const [scanned, setScanned] = useState(false);
   const [finded, setFinded] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [pieza, setPieza] = useState<Part | null>(null);
   const { data: piezas } = useQuery<Part[]>("piezas");
 

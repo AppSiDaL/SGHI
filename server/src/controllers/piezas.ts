@@ -37,15 +37,27 @@ router.post(
 );
 
 router.get("/:id", async (req: Request, res: Response) => {
-  const pieza = await Pieza.findByPk(req.params.id, {
-    include: [
-      {
-        model: Herramienta,
-      },
-    ],
-  });
+  const pieza = await Pieza.findByPk(req.params.id);
   if (pieza) {
-    res.status(200).json(pieza);
+    const piezaDetalles = await Pieza.findOne({
+      where: {
+        id: pieza.id
+      },
+      include: [
+        {
+          model: Herramienta,
+          where: {
+            codigo: pieza.codigo,
+            numero_pieza: pieza.numero_pieza
+          }
+        },
+      ],
+    });
+    if (piezaDetalles) {
+      res.status(200).json(piezaDetalles);
+    } else {
+      res.status(404).end();
+    }
   } else {
     res.status(404).end();
   }

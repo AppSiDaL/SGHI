@@ -8,7 +8,12 @@ import FormData from "form-data";
 const multer = require("multer");
 const axios = require("axios");
 const fs = require("fs");
-const upload = multer({ dest: "uploads/" });
+import PublitioAPI from 'publitio_js_sdk'
+import { readFileSync } from 'fs'
+
+const upload = multer({ dest: 'uploads/' })
+
+const publitio = new PublitioAPI('669h9nrnmMLBlDRmR66v', 'inh3NVD6Wx3vjLTPVJAytHX6S4wj2RDa')
 
 const { Herramienta } = require("../models");
 
@@ -76,36 +81,25 @@ interface FileRequest extends Request {
   file?: Express.Multer.File;
 }
 
-router.post(
-  "/upload",
-  upload.single("file"),
-  async (req: FileRequest, res: Response) => {
-    const file = req.file;
-    if (!file) {
+router.post("/upload", upload.single("file"), async (req: any, res: Response) => {
+  const file = req.file;
+  if (!file) {
       return res.status(400).json({ error: "No file provided" });
-    }
-    const fileStream = fs.createReadStream(file.path);
-
-    const formData = new FormData();
-    formData.append("public_id", file.filename);
-    formData.append("title", file.originalname);
-    formData.append("file", fileStream);
-
-    const response = await axios.post(process.env.PUBLITIO_URL, formData, {
-      headers: {
-        Accept: "application/json",
-        ...formData.getHeaders(),
-      },
-    });
-
-    fs.unlinkSync(file.path); // Elimina el archivo después de enviarlo
-
-    res.json({
-      message: "Archivo subido con éxito",
-      response: response.data,
-    });
   }
-);
+
+  const fileBuffer = readFileSync(file.path)
+
+  publitio.uploadFile(fileBuffer, 'file')
+      .then((data:any) => { 
+          res.json({
+              message: "Archivo subido con éxito",
+              response: data,
+          });
+      })
+      .catch((error:Error) => { 
+          res.status(500).json({ error: error.message });
+      })
+});
 
 module.exports = router;
 

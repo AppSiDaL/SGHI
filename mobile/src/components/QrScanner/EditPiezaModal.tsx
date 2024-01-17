@@ -20,7 +20,7 @@ export default function EditPiezaModal({
 }: EditPiezaModalProps) {
   const [area, setArea] = useState<string | null>(null);
   const queryClient = useQueryClient();
-
+  console.log(pieza)
   const mutation = useMutation(
     (newPart: any) => piezasService.changePart(newPart.id, newPart),
     {
