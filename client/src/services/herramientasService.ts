@@ -3,9 +3,9 @@ import { Herramienta } from "../types/herramientas";
 import { url as baseURL } from "../utils";
 const url = baseURL + "/herramientas";
 
-let token: any = null;
+let token: string|null = null;
 
-const setToken = (newToken: String) => {
+const setToken = (newToken: string) => {
   token = `Bearer ${newToken}`;
 };
 
