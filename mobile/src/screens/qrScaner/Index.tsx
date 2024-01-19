@@ -1,53 +1,52 @@
-import { Alert, View } from "react-native";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import QrScaner from "../../components/QrScanner/Index";
-import { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import type { Part } from "../../types/piezas";
-import { Text } from "@rneui/themed";
-import piezasService from "../../services/piezasService";
-import EditPiezaModal from "../../components/QrScanner/EditPiezaModal";
-export default function Calculadora() {
-  const [scanned, setScanned] = useState(false);
-  const [finded, setFinded] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const [pieza, setPieza] = useState<Part | null>(null);
-  const { data: piezas } = useQuery<Part[]>("piezas");
+import { View } from 'react-native'
+import { useQuery } from 'react-query'
+import QrScaner from '../../components/QrScanner/Index'
+import React, { useState } from 'react'
+import { Ionicons } from '@expo/vector-icons'
+import type { Part } from '../../types/piezas'
+import { Text } from '@rneui/themed'
+import EditPiezaModal from '../../components/QrScanner/EditPiezaModal'
+export default function Calculadora (): JSX.Element {
+  const [scanned, setScanned] = useState(false)
+  const [finded, setFinded] = useState(false)
+  const [visible, setVisible] = useState(true)
+  const [pieza, setPieza] = useState<Part | null>(null)
+  const { data: piezas } = useQuery<Part[]>('piezas')
 
   const handleBarCodeScanned = ({
     type,
-    data,
+    data
   }: {
-    type: string;
-    data: string;
-  }) => {
-    setScanned(true);
-    const piezaFiltered = piezas?.filter((pieza) => pieza.id === Number(data));
-    if (data && piezaFiltered) {
-      setPieza(piezaFiltered[0]);
-      setFinded(true);
+    type: string
+    data: string
+  }): void => {
+    setScanned(true)
+    const piezaFiltered = piezas?.filter((pieza) => pieza.id === Number(data))
+    if (data !== null && piezaFiltered !== undefined) {
+      setPieza(piezaFiltered[0])
+      setFinded(true)
     }
-  };
+  }
 
   return (
     <>
       <View
         style={{
           paddingTop: 40,
-          backgroundColor: "#2C70DB",
-          alignItems: "center",
+          backgroundColor: '#2C70DB',
+          alignItems: 'center',
           height: 70,
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between'
         }}
       >
-        <Text style={{ color: "white", marginLeft: 15 }}>Scanner</Text>
+        <Text style={{ color: 'white', marginLeft: 15 }}>Scanner</Text>
         {scanned && (
           <Ionicons
             name="reload"
             onPress={() => {
-              setScanned(false);
-              setFinded(false);
+              setScanned(false)
+              setFinded(false)
             }}
             size={24}
             color="black"
@@ -58,11 +57,12 @@ export default function Calculadora() {
       <View
         style={{
           flex: 1,
-          flexDirection: "column",
-          justifyContent: "center",
+          flexDirection: 'column',
+          justifyContent: 'center'
         }}
       >
-        {finded ? (
+        {finded
+          ? (
           <>
             <EditPiezaModal
               visible={visible}
@@ -70,14 +70,15 @@ export default function Calculadora() {
               pieza={pieza}
             />
           </>
-        ) : (
+            )
+          : (
           <QrScaner
             scanned={scanned}
             setScanned={setScanned}
             handleBarCodeScanned={handleBarCodeScanned}
           />
-        )}
+            )}
       </View>
     </>
-  );
+  )
 }

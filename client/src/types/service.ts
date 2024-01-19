@@ -1,7 +1,7 @@
-export interface ServiceProps extends Object {
-  getItems: Function;
-  name: String;
-  createItem: Function;
-  removeItem: Function;
-  setToken?: Function;
+export interface ServiceProps extends Record<string, unknown> {
+  getItems: () => void
+  name: string
+  createItem: (item: any) => void
+  removeItem: (id: string) => void
+  setToken?: (token: string) => void
 }

@@ -1,47 +1,47 @@
-import { Button, Card, Input, Text } from "@rneui/themed";
-import React, { useState } from "react";
-import { Alert, Modal, StyleSheet, View } from "react-native";
-import { Entypo } from "@expo/vector-icons";
-import { Part } from "../../types/piezas";
-import DropDownAreas from "./DropDownAreas";
-import { useMutation, useQueryClient } from "react-query";
-import piezasService from "../../services/piezasService";
+import { Button, Card, Input, Text } from '@rneui/themed'
+import React, { useState } from 'react'
+import { Alert, Modal, StyleSheet, View } from 'react-native'
+import { Entypo } from '@expo/vector-icons'
+import { type Part } from '../../types/piezas'
+import DropDownAreas from './DropDownAreas'
+import { useMutation, useQueryClient } from 'react-query'
+import piezasService from '../../services/piezasService'
 
 interface EditPiezaModalProps {
-  pieza: Part | null;
-  visible: boolean;
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  pieza: Part | null
+  visible: boolean
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function EditPiezaModal({
+export default function EditPiezaModal ({
   pieza,
   visible,
-  setVisible,
-}: EditPiezaModalProps) {
-  const [area, setArea] = useState<string | null>(null);
-  const queryClient = useQueryClient();
+  setVisible
+}: EditPiezaModalProps): JSX.Element {
+  const [area, setArea] = useState<string | null>(null)
+  const queryClient = useQueryClient()
   console.log(pieza)
   const mutation = useMutation(
-    (newPart: any) => piezasService.changePart(newPart.id, newPart),
+    async (newPart: any) => await piezasService.changePart(newPart.id as number, newPart),
     {
-      onSuccess: (data: any) => {
-        Alert.alert("Pieza actualizada");
-        queryClient.invalidateQueries("piezas");
+      onSuccess: async (data: any) => {
+        Alert.alert('Pieza actualizada')
+        await queryClient.invalidateQueries('piezas')
       },
       onError: (error: Error) => {
-        console.log(error);
-      },
+        console.log(error)
+      }
     }
-  );
+  )
 
-  const savePieza = () => {
-    setVisible(!visible);
-    const modifiedPart = { ...pieza, area };
-    mutation.mutate(modifiedPart);
-  };
-  const closeModal = () => {
-    setVisible(!visible);
-  };
+  const savePieza = (): void => {
+    setVisible(!visible)
+    const modifiedPart = { ...pieza, area }
+    mutation.mutate(modifiedPart)
+  }
+  const closeModal = (): void => {
+    setVisible(!visible)
+  }
 
   return (
     <View style={styles.centeredView}>
@@ -50,50 +50,50 @@ export default function EditPiezaModal({
         transparent={true}
         visible={visible}
         onRequestClose={() => {
-          setVisible(!visible);
+          setVisible(!visible)
         }}
       >
         <Card>
           <Text h4>Pieza ID: {pieza?.id}</Text>
           <Text>OT: {pieza?.orden}</Text>
           <Text>Codigo: {pieza?.codigo}</Text>
-          <Text style={{ fontWeight: "bold" }}>{pieza?.descripcion}</Text>
+          <Text style={{ fontWeight: 'bold' }}>{pieza?.descripcion}</Text>
           <Text>{pieza?.cantidad} Pzas</Text>
-          <Text style={{ textTransform: "capitalize" }}>{pieza?.estado}</Text>
+          <Text style={{ textTransform: 'capitalize' }}>{pieza?.estado}</Text>
           <Text>{pieza?.fecha_entrada}</Text>
           <Input
             style={{
-              textTransform: "capitalize",
+              textTransform: 'capitalize',
               marginTop: 20,
-              textAlign: "center",
+              textAlign: 'center'
             }}
             placeholder={pieza?.area}
             value={pieza?.area}
             disabled
           />
           <Entypo
-            style={{ textAlign: "center" }}
+            style={{ textAlign: 'center' }}
             name="select-arrows"
             size={24}
             color="black"
           />
           <DropDownAreas setValue={setArea} value={area} />
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
-            <Button radius={"sm"} type="solid" onPress={savePieza}>
+            <Button radius={'sm'} type="solid" onPress={savePieza}>
               Guardar
               <Entypo
-                style={{ textAlign: "center" }}
+                style={{ textAlign: 'center' }}
                 name="save"
                 size={24}
                 color="white"
               />
             </Button>
-            <Button radius={"sm"} type="solid" onPress={closeModal} color="red">
+            <Button radius={'sm'} type="solid" onPress={closeModal} color="red">
               Descartar
               <Entypo
-                style={{ textAlign: "center" }}
+                style={{ textAlign: 'center' }}
                 name="trash"
                 size={24}
                 color="white"
@@ -103,49 +103,49 @@ export default function EditPiezaModal({
         </Card>
       </Modal>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 5
   },
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
+    elevation: 2
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: '#F194FF'
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: '#2196F3'
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
-  },
-});
+    textAlign: 'center'
+  }
+})

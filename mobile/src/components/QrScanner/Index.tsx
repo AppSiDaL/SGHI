@@ -1,40 +1,42 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
-import { BarCodeScanner } from "expo-barcode-scanner";
+import React, { useState, useEffect } from 'react'
+import { Text, StyleSheet } from 'react-native'
+import { BarCodeScanner } from 'expo-barcode-scanner'
 
 interface QRScannerProps {
   handleBarCodeScanned: ({
     type,
-    data,
+    data
   }: {
-    type: string;
-    data: string;
-  }) => void;
-  scanned: boolean;
-  setScanned: React.Dispatch<React.SetStateAction<boolean>>;
+    type: string
+    data: string
+  }) => void
+  scanned: boolean
+  setScanned: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function QrScaner({
+export default function QrScaner ({
   handleBarCodeScanned,
   scanned,
-  setScanned,
-}: QRScannerProps) {
-  const [hasPermission, setHasPermission] = useState(false);
+  setScanned
+}: QRScannerProps): JSX.Element {
+  const [hasPermission, setHasPermission] = useState(false)
 
   useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    };
+    const getBarCodeScannerPermissions = async (): Promise<void> => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync()
+      setHasPermission(status === 'granted')
+    }
 
-    getBarCodeScannerPermissions();
-  }, []);
+    getBarCodeScannerPermissions().catch((error) => {
+      console.log(error)
+    })
+  }, [])
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return <Text>Requesting for camera permission</Text>
   }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+  if (!hasPermission) {
+    return <Text>No access to camera</Text>
   }
 
   return (
@@ -42,5 +44,5 @@ export default function QrScaner({
       onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
       style={StyleSheet.absoluteFillObject}
     />
-  );
+  )
 }

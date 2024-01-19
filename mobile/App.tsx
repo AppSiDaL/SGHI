@@ -1,16 +1,16 @@
-import * as React from "react";
-import { AppRegistry } from "react-native";
-import App from "./src/App";
-import { QueryClient, QueryClientProvider } from "react-query";
+import * as React from 'react'
+import { AppRegistry } from 'react-native'
+import App from './src/App'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
-export default function Main() {
-  const queryClient = new QueryClient();
+export default function Main (): JSX.Element {
+  const queryClient = new QueryClient()
 
   return (
     <QueryClientProvider client={queryClient}>
       <App />
     </QueryClientProvider>
-  );
+  )
 }
 
-AppRegistry.registerComponent("mobile", () => Main);
+AppRegistry.registerComponent('mobile', () => Main)

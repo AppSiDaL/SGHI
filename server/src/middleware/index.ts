@@ -1,80 +1,80 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
-import { CustomError, CustonRequest } from "../types";
+import { type NextFunction, type Request, type Response } from 'express'
+import { type CustomError, type CustonRequest } from '../types'
 
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken')
 
 const requestLogger = (
   request: Request,
   response: Response,
   next: NextFunction
-) => {
-  console.info("---");
-  console.info("\x1b[36m%s\x1b[0m", "Method:", request.method); // Cyan
-  console.info("\x1b[32m%s\x1b[0m", "Path:  ", request.path); // Green
-  console.info("\x1b[33m%s\x1b[0m", "Body:  ", request.body); // Yellow
-  console.info("---");
-  next();
-};
+): void => {
+  console.info('---')
+  console.info('\x1b[36m%s\x1b[0m', 'Method:', request.method) // Cyan
+  console.info('\x1b[32m%s\x1b[0m', 'Path:  ', request.path) // Green
+  console.info('\x1b[33m%s\x1b[0m', 'Body:  ', request.body) // Yellow
+  console.info('---')
+  next()
+}
 
-const unknownEndpoint = (request: Request, response: Response) => {
-  response.status(404).send({ error: "unknown endpoint" });
-};
+const unknownEndpoint = (request: Request, response: Response): void => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
 
 const addToken = (
   request: CustonRequest,
   response: Response,
   next: NextFunction
-) => {
-  const authorization = request.get("Authorization")?.trimStart();
-  if (authorization && authorization.startsWith("Bearer")) {
-    const token = authorization.replace("Bearer", "").trimStart();
-    console.log(token);
-    request.token = token;
-    next();
-    return request;
+): CustonRequest | null => {
+  const authorization = request.get('Authorization')?.trimStart()
+  if (authorization !== null && typeof authorization === 'string' && authorization.startsWith('Bearer')) {
+    const token = authorization.replace('Bearer', '').trimStart()
+    console.log(token)
+    request.token = token
+    next()
+    return request
   }
-  next();
-  return null;
-};
+  next()
+  return null
+}
 
 const userExtractor = (
   request: CustonRequest,
   response: Response,
   next: NextFunction
-) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  request.user = decodedToken.username;
-  next();
-  return request;
-};
+): CustonRequest => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  request.user = decodedToken.username
+  next()
+  return request
+}
 
 const errorHandler = (
   error: CustomError,
   request: Request,
   response: Response,
   next: NextFunction
-) => {
-  console.info(error);
+): Response | undefined => {
+  console.info(error)
 
-  if (error.name === "CastError") {
-    return response.status(400).send({ error: "malformatted id" });
-  } else if (error.name === "ValidationError") {
-    return response.status(400).json({ error: error.message });
-  } else if (error.name === "JsonWebTokenError") {
-    return response.status(401).json({ error: error.message });
-  } else if (error.name === "TokenExpiredError") {
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  } else if (error.name === 'JsonWebTokenError') {
+    return response.status(401).json({ error: error.message })
+  } else if (error.name === 'TokenExpiredError') {
     return response.status(401).json({
-      error: "token expired",
-    });
+      error: 'token expired'
+    })
   }
 
-  next(error);
-};
+  next(error)
+}
 
 module.exports = {
   userExtractor,
   requestLogger,
   addToken,
   unknownEndpoint,
-  errorHandler,
-};
+  errorHandler
+}

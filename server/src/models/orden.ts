@@ -1,6 +1,6 @@
-const { Model, DataTypes } = require("sequelize");
+const { Model, DataTypes } = require('sequelize')
 
-const { sequelize } = require("../utils/db");
+const { sequelize } = require('../utils/db')
 
 class Orden extends Model {}
 
@@ -9,76 +9,76 @@ Orden.init(
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
+      autoIncrement: true
     },
-    orden:{
+    orden: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     r3: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: true
     },
     departamento: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: false
     },
     codigo: {
       type: DataTypes.TEXT,
-      allowNull: true,
+      allowNull: true
     },
     estado: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: false
     },
     avance: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     costo_cotizado: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: true
     },
     costo_material: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: true
     },
     costo_mano_obra: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: true
     },
     costo_total: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: true
     },
     fecha_solicitud: {
       type: DataTypes.DATEONLY,
-      allowNull: false,
+      allowNull: false
     },
     fecha_autorizacion: {
       type: DataTypes.DATEONLY,
-      allowNull: true,
+      allowNull: true
     },
     fecha_salida: {
       type: DataTypes.DATEONLY,
-      allowNull: true,
+      allowNull: true
     },
     dias: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: true
     },
     prioridad: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+      allowNull: false
+    }
   },
   {
     sequelize,
     underscored: true,
     timestamps: false,
-    modelName: "ordenes",
+    modelName: 'ordenes'
   }
-);
-export {};
+)
+export {}
 
-module.exports = Orden;
+module.exports = Orden
