@@ -1,63 +1,63 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { Model, DataTypes } = require("sequelize");
-const { sequelize } = require("../utils/db");
+const { Model, DataTypes } = require('sequelize');
+const { sequelize } = require('../utils/db');
 class Pieza extends Model {
 }
 Pieza.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
     },
     orden: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false
     },
     codigo: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true
     },
     numero_pieza: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: false
     },
     descripcion: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: false
     },
     cantidad: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false
     },
     estado: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: false
     },
     area: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: false
     },
     fecha_entrada: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: false
     },
     fecha_salida: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: false
     },
     dias: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false
     },
     observaciones: {
         type: DataTypes.TEXT,
-        allowNull: false,
-    },
+        allowNull: true
+    }
 }, {
     sequelize,
     underscored: true,
     timestamps: false,
-    modelName: "piezas",
+    modelName: 'piezas'
 });
 module.exports = Pieza;

@@ -9,18 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const bcrypt = require("bcrypt");
-const usersRouter = require("express").Router();
-const User = require("../models/usuario");
-usersRouter.get("/", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+const bcrypt = require('bcrypt');
+const usersRouter = require('express').Router();
+const User = require('../models/usuario');
+usersRouter.get('/', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield User.findAll();
     response.json(users);
 }));
-usersRouter.post("/", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+usersRouter.post('/', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, name, password, role } = request.body;
-    if (password) {
+    if (password !== null && password !== undefined) {
         if (password.length < 3) {
-            return response.status(400).json({ error: "password too short" });
+            return response.status(400).json({ error: 'password too short' });
         }
         const saltRounds = 10;
         const passwordHash = yield bcrypt.hash(password, saltRounds);
@@ -28,14 +28,14 @@ usersRouter.post("/", (request, response) => __awaiter(void 0, void 0, void 0, f
             username,
             role,
             name,
-            password: passwordHash,
+            password: passwordHash
         });
         const savedUser = yield user.save();
         response.status(201).json(savedUser);
     }
     else {
         return response.status(400).json({
-            error: "User validation failed: username: Path `password` is required.",
+            error: 'User validation failed: username: Path `password` is required.'
         });
     }
 }));

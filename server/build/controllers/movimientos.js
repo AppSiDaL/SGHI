@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const router = require("express").Router();
-const { Movimiento } = require("../models");
-router.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const router = require('express').Router();
+const { Movimiento } = require('../models');
+router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const movimientos = yield Movimiento.findAll();
     res.json(movimientos);
 }));
-router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const movimiento = yield Movimiento.create(req.body);
         res.json(movimiento);
@@ -24,25 +24,25 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(400).json({ error });
     }
 }));
-router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const movimiento = yield Movimiento.findByPk(req.params.id);
-    if (movimiento) {
+    if (movimiento !== null && movimiento !== undefined) {
         res.json(movimiento);
     }
     else {
         res.status(404).end();
     }
 }));
-router.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const movimiento = yield Movimiento.findByPk(req.params.id);
-    if (movimiento) {
+    if (movimiento !== null && movimiento !== undefined) {
         yield movimiento.destroy();
     }
     res.status(204).end();
 }));
-router.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const movimiento = yield Movimiento.findByPk(req.params.id);
-    if (movimiento) {
+    if (movimiento !== null && movimiento !== undefined) {
         movimiento.important = req.body.important;
         yield movimiento.save();
         res.json(movimiento);

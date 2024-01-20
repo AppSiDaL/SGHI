@@ -10,23 +10,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectToDatabase = exports.sequelize = void 0;
-const Sequelize = require("sequelize");
-const { DATABASE_URL } = require("./config");
+const Sequelize = require('sequelize');
+const { DATABASE_URL } = require('./config');
 exports.sequelize = new Sequelize(DATABASE_URL, {
     dialectOptions: {
         ssl: {
             require: true,
-            rejectUnauthorized: false,
-        },
-    },
+            rejectUnauthorized: false
+        }
+    }
 });
 const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield exports.sequelize.authenticate();
-        console.log("connected to the database");
+        console.log('connected to the database');
     }
     catch (err) {
-        console.log("failed to connect to the database", err);
+        console.log('failed to connect to the database', err);
         return process.exit(1);
     }
     return null;

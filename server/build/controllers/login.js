@@ -9,26 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const loginRouter = require("express").Router();
-const User = require("../models/usuario");
-loginRouter.post("/", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const loginRouter = require('express').Router();
+const User = require('../models/usuario');
+loginRouter.post('/', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = request.body;
     const user = yield User.findOne({ username });
     const passwordCorrect = user === null ? false : yield bcrypt.compare(password, user.password);
-    if (!(user && passwordCorrect)) {
+    if (user === null || passwordCorrect === false) {
         return response.status(401).json({
-            error: "invalid username or password",
+            error: 'invalid username or password'
         });
     }
     const userForToken = {
         username: user.username,
         name: user.name,
-        role: user.role,
+        role: user.role
     };
     const token = jwt.sign(userForToken, process.env.SECRET, {
-        expiresIn: 60 * 60 * 24,
+        expiresIn: 60 * 60 * 24
     });
     response
         .status(200)

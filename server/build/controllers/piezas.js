@@ -9,58 +9,71 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const { Herramienta, Orden } = require("../models");
-const middleware = require("../middleware");
-const router = require("express").Router();
-const jwt = require("jsonwebtoken");
-const { Pieza } = require("../models");
-router.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const { Herramienta } = require('../models');
+const middleware = require('../middleware');
+const router = require('express').Router();
+const jwt = require('jsonwebtoken');
+const { Pieza } = require('../models');
+router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const piezas = yield Pieza.findAll();
     res.json(piezas);
 }));
-router.post("/", middleware.userExtractor, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/', middleware.userExtractor, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = jwt.verify(req.token, process.env.SECRET);
-    if (!decodedToken.username) {
-        return res.status(401).json({ error: "token invalid" });
+    if (decodedToken.username === undefined) {
+        return res.status(401).json({ error: 'token invalid' });
     }
-    const fecha_entrada = new Date(req.body.fecha_entrada);
-    const fecha_salida = new Date(req.body.fecha_salida);
-    const dias = Math.abs(fecha_salida.getTime() - fecha_entrada.getTime()) /
+    const fechaEntrada = new Date(req.body.fecha_entrada);
+    const fechaSalida = new Date(req.body.fecha_salida);
+    const dias = Math.abs(fechaSalida.getTime() - fechaEntrada.getTime()) /
         (1000 * 60 * 60 * 24);
-    const newPieza = Object.assign(Object.assign({}, req.body), { dias: dias });
+    const newPieza = Object.assign(Object.assign({}, req.body), { dias });
     const pieza = yield Pieza.create(newPieza);
     return res.status(201).json(pieza);
 }));
-router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const pieza = yield Pieza.findByPk(req.params.id, {
-        include: [
-            {
-                model: Herramienta,
+router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pieza = yield Pieza.findByPk(req.params.id);
+    if (pieza !== null && pieza !== undefined) {
+        const piezaDetalles = yield Pieza.findOne({
+            where: {
+                id: pieza.id
             },
-        ],
-    });
-    if (pieza) {
-        res.status(200).json(pieza);
+            include: [
+                {
+                    model: Herramienta,
+                    where: {
+                        codigo: pieza.codigo,
+                        numero_pieza: pieza.numero_pieza
+                    }
+                }
+            ]
+        });
+        if (piezaDetalles !== null && piezaDetalles !== undefined) {
+            res.status(200).json(piezaDetalles);
+        }
+        else {
+            res.status(404).end();
+        }
     }
     else {
         res.status(404).end();
     }
 }));
-router.delete("/:id", middleware.userExtractor, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/:id', middleware.userExtractor, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = jwt.verify(req.token, process.env.SECRET);
-    if (!decodedToken.username) {
-        return res.status(401).json({ error: "token invalid" });
+    if (decodedToken.username === undefined) {
+        return res.status(401).json({ error: 'token invalid' });
     }
     const pieza = yield Pieza.findByPk(req.params.id);
-    if (pieza) {
+    if (pieza !== null && pieza !== undefined) {
         yield pieza.destroy();
-        return res.status(200).json({ message: "Pieza eliminada" });
+        return res.status(200).json({ message: 'Pieza eliminada' });
     }
-    return res.status(400).json({ error: "Pieza no encontrada" });
+    return res.status(400).json({ error: 'Pieza no encontrada' });
 }));
-router.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pieza = yield Pieza.findByPk(req.params.id);
-    if (pieza) {
+    if (pieza !== null && pieza !== undefined) {
         pieza.area = req.body.area;
         yield pieza.save();
         res.json(pieza);

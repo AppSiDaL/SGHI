@@ -13,9 +13,12 @@ const createItem = async (pieza: Movimiento): Promise<any> => {
   const request = await axios.post(url, pieza, config)
   return request.data
 }
-const removeItem = async (id: string): Promise<any> => {
-  const request = await axios.delete(`${url}/${id}`)
-  return request
+const removeItem = async (items: Movimiento[]): Promise<any> => {
+  const deleteRequests = items.map(async (item) => {
+    const response = await axios.delete(`${url}/${item.id}`)
+    return response
+  })
+  return await Promise.all(deleteRequests)
 }
 
 export default { getItems, name: 'Movimiento', createItem, removeItem }

@@ -1,31 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { Model, DataTypes } = require("sequelize");
-const { sequelize } = require("../utils/db");
+const { Model, DataTypes } = require('sequelize');
+const { sequelize } = require('../utils/db');
 class Usuario extends Model {
 }
 Usuario.init({
     name: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: false
     },
     username: {
         primaryKey: true,
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: false
     },
     password: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: false
     },
     role: {
         type: DataTypes.TEXT,
-        allowNull: false,
-    },
+        allowNull: false
+    }
 }, {
     sequelize,
     underscored: true,
     timestamps: false,
-    modelName: "usuarios",
+    modelName: 'usuarios'
 });
 module.exports = Usuario;
