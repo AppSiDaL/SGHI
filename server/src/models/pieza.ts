@@ -54,6 +54,14 @@ Pieza.init(
     observaciones: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    herramienta_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'herramientas',
+        key: 'id'
+      }
     }
   },
   {

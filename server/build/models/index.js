@@ -9,8 +9,8 @@ const { sequelize } = require('../utils/db');
 sequelize.sync().then(() => {
     Pieza.hasOne(Movimiento, { foreignKey: 'id' });
     Movimiento.belongsTo(Pieza, { foreignKey: 'id' });
-    Pieza.hasOne(Herramienta, { foreignKey: 'id' });
-    Herramienta.belongsTo(Pieza, { foreignKey: 'id' });
+    Herramienta.hasOne(Pieza, { foreignKey: 'herramienta_id' });
+    Pieza.belongsTo(Herramienta, { foreignKey: 'herramienta_id' });
     Pieza.belongsTo(Orden, { foreignKey: 'orden' });
     Orden.hasMany(Pieza, { foreignKey: 'orden' });
     console.log('All models were synchronized successfully.');

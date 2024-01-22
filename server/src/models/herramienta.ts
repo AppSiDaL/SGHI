@@ -30,7 +30,7 @@ Herramienta.init(
     dibujo: {
       type: DataTypes.TEXT,
       allowNull: false
-    }
+    },
   },
   {
     sequelize,
