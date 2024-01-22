@@ -6,6 +6,7 @@ import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Skeleton } from "primereact/skeleton";
+import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 export default function View() {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -38,6 +39,23 @@ export default function View() {
       </>
     );
   }
+  const propiedades = ['orden', 'codigo', 'numero_pieza', 'descripcion', 'cantidad', 'estado', 'area', 'fecha_entrada', 'fecha_salida', 'dias', 'observaciones'];
+  const areas: any = [
+    "corte",
+    "tornos",
+    "fresas",
+    "temple",
+    "rectificado plano",
+    "rectificado cilindrico",
+    "rectificado vertical",
+    "fresas cnc",
+    "tornos cnc",
+    "edm hilo",
+    "edm penetracion",
+    "ajuste moldes",
+    "ajuste troqueles",
+    "calidad",
+  ];
   return (
     <Card
       title={
@@ -59,7 +77,7 @@ export default function View() {
           </div>
         ) : (
           <div className="flex">
-            <p style={{ width: "50%" }}>{pieza?.descripcion}</p>
+            <p style={{ width: "50%",textTransform:"capitalize" }}>{pieza?.descripcion}</p>
             <div className="flex flex-wrap gap-2">
               <Button
                 style={{ height: "50%", alignSelf: "center" }}
@@ -123,7 +141,12 @@ export default function View() {
                 <label style={{ display: "inline-block", width: widthLabel }}>
                   Area:{" "}
                 </label>
-                <InputText defaultValue={pieza?.area} />
+                <Dropdown
+            value={area}
+            onChange={(e: DropdownChangeEvent) => setArea(e.value)}
+            options={areas}
+            placeholder="Area..."
+          />
               </span>
               <br />
               <span>
@@ -158,18 +181,12 @@ export default function View() {
             </>
           ) : (
             <>
-              <p>Orden: {pieza?.orden}</p>
-              <p>Código: {pieza?.codigo}</p>
-              <p>Número de pieza: {pieza?.numero_pieza}</p>
-              <p>Descripción: {pieza?.descripcion}</p>
-              <p>Cantidad: {pieza?.cantidad}</p>
-              <p>Estado: {pieza?.estado}</p>
-              <p>Área: {pieza?.area}</p>
-              <p>Fecha de entrada: {pieza?.fecha_entrada}</p>
-              <p>Fecha de salida: {pieza?.fecha_salida}</p>
-              <p>Dias restantes: {pieza?.dias}</p>
-              <p>Observaciones: {pieza?.observaciones}</p>
-            </>
+            {propiedades.map(property => (
+              <p style={{fontWeight:"bold", fontSize:25,margin:5,textTransform:"capitalize"}} key={property}>
+                {property}: <span style={{fontWeight:"normal"}}>{String(pieza?.[property as keyof PartDraw])}</span>
+              </p>
+            ))}
+          </>
           )}
         </div>
         <div className="col">

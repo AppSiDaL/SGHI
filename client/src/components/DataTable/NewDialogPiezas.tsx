@@ -60,8 +60,23 @@ export default function EditDialogPiezas({
     </React.Fragment>
   );
 
-  const estados: any = ["procesando","ajustando","terminado"];
-  const areas:any=["fresas","tornos","soldadura","pintura","almacen","calidad","administracion","gerencia"]
+  const estados: any = ["procesando", "ajustando", "terminado"];
+  const areas: any = [
+    "corte",
+    "tornos",
+    "fresas",
+    "temple",
+    "rectificado plano",
+    "rectificado cilindrico",
+    "rectificado vertical",
+    "fresas cnc",
+    "tornos cnc",
+    "edm hilo",
+    "edm penetracion",
+    "ajuste moldes",
+    "ajuste troqueles",
+    "calidad",
+  ];
   return (
     <Dialog
       visible={productDialog}

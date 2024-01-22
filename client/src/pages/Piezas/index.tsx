@@ -61,17 +61,23 @@ export default function page ({ theme }: piezaPageProps): JSX.Element {
     {
       field: 'codigo',
       header: 'Codigo',
-      body: undefined
+      body: (rowData: Part) => (
+        <div style={{ textTransform: 'capitalize' }}>{rowData.codigo}</div>
+      )
     },
     {
       field: 'numero_pieza',
       header: '#',
-      body: undefined
+      body: (rowData: Part) => (
+        <div style={{ textTransform: 'capitalize' }}>{rowData.numero_pieza}</div>
+      )
     },
     {
       field: 'descripcion',
       header: 'Descripcion',
-      body: undefined
+      body: (rowData: Part) => (
+        <div style={{ textTransform: 'capitalize' }}>{rowData.descripcion}</div>
+      )
     },
     {
       field: 'cantidad',

@@ -3,7 +3,7 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { classNames } from "primereact/utils";
-import React, { useRef, useState } from "react";
+import React, {  useState } from "react";
 import { FileUpload } from "primereact/fileupload";
 import { Toast } from "primereact/toast";
 import herramientasService from "../../services/herramientasService";
@@ -13,10 +13,12 @@ interface EditDialogProps {
   setProductDialog: React.Dispatch<React.SetStateAction<boolean>>;
   productDialog: boolean;
   submitted: boolean;
+  toast: React.RefObject<Toast>;
 }
 
 export default function EditDialogPiezas({
   setSubmitted,
+  toast,
   setProductDialog,
   productDialog,
   submitted,
@@ -25,7 +27,6 @@ export default function EditDialogPiezas({
   const [codigo, setCodigo] = useState<string>("");
   const [descripcion, setDescripcion] = useState<string>("");
   const [response, setResponse] = useState<object>({});
-  const toast = useRef<Toast>(null)
 
   const hideDialog = () => {
     setSubmitted(false);
@@ -43,8 +44,8 @@ export default function EditDialogPiezas({
       hideDialog();
       toast.current?.show({
         severity: "success",
-        summary: "Successful",
-        detail: "Product Created",
+        summary: "Exito",
+        detail: "Herramienta Creada",
         life: 3000,
       });
     }).catch((err) => {console.log(err)});
