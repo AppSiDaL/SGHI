@@ -7,8 +7,19 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Skeleton } from "primereact/skeleton";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+import { InputNumber } from "primereact/inputnumber";
 export default function View() {
   const [isEditing, setIsEditing] = useState(false);
+  const [orden, setOrden] = useState<string>();
+  const [codigo, setCodigo] = useState<string>();
+  const [numeroPieza, setNumeroPieza] = useState<string>();
+  const [descripcion, setDescripcion] = useState<string>();
+  const [cantidad, setCantidad] = useState<number>();
+  const [estado, setEstado] = useState<string>();
+  const [area, setArea] = useState<string>();
+  const [fechaEntrada, setFechaEntrada] = useState<string>();
+  const [fechaSalida, setFechaSalida] = useState<string>();
+  const [observaciones, setObservaciones] = useState<string>();
 
   const { id } = useParams<{ id: string }>();
   const [pieza, setPieza] = useState<PartDraw>();
@@ -19,6 +30,16 @@ export default function View() {
         .getItem(id)
         .then((response) => {
           setPieza(response.data);
+          setOrden(String(response.data.orden));
+          setCodigo(response.data.codigo);
+          setNumeroPieza(String(response.data.numero_pieza));
+          setDescripcion(response.data.descripcion);
+          setCantidad(response.data.cantidad);
+          setEstado(response.data.estado);
+          setArea(response.data.area);
+          setFechaEntrada(response.data.fecha_entrada);
+          setFechaSalida(response.data.fecha_salida);
+          setObservaciones(response.data.observaciones);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -26,7 +47,8 @@ export default function View() {
           setIsLoading(false);
         });
     }
-  }, []);
+  }, [
+  ]);
   const widthLabel = "150px";
   if (isLoading) {
     return (
@@ -39,7 +61,20 @@ export default function View() {
       </>
     );
   }
-  const propiedades = ['orden', 'codigo', 'numero_pieza', 'descripcion', 'cantidad', 'estado', 'area', 'fecha_entrada', 'fecha_salida', 'dias', 'observaciones'];
+
+  const propiedades = [
+    "orden",
+    "codigo",
+    "numero_pieza",
+    "descripcion",
+    "cantidad",
+    "estado",
+    "area",
+    "fecha_entrada",
+    "fecha_salida",
+    "dias",
+    "observaciones",
+  ];
   const areas: any = [
     "corte",
     "tornos",
@@ -56,17 +91,35 @@ export default function View() {
     "ajuste troqueles",
     "calidad",
   ];
+  const estados: any = ["procesando", "ajustando", "terminado"];
+  const save=async()=>{
+    const newPieza = {
+      orden:orden??'',
+      codigo:codigo??'',
+      numero_pieza: numeroPieza??'',
+      descripcion:descripcion??'',
+      cantidad: cantidad??0,
+      estado:estado??'',
+      area:area??'',
+      fecha_entrada: fechaEntrada??'',
+      fecha_salida: fechaSalida??'',
+      observaciones:observaciones??''
+    };
+    await piezasService.updateItem(id ?? '',newPieza);
+    setIsEditing(false)
+  }
   return (
     <Card
       title={
         isEditing ? (
           <div className="flex gap-1">
-            <InputText
-              style={{ width: "50%" }}
-              defaultValue={pieza?.descripcion}
-            />
+            <p
+              style={{ width: "50%", textTransform: "capitalize", margin: 10 }}
+            >
+              {pieza?.descripcion}
+            </p>
             <div className="flex flex-wrap gap-2">
-              <Button label="Guardar" icon="pi pi-check" severity="success" />
+              <Button label="Guardar" icon="pi pi-check" onClick={save}severity="success" />
               <Button
                 label="Descartar"
                 icon="pi pi-times"
@@ -77,7 +130,11 @@ export default function View() {
           </div>
         ) : (
           <div className="flex">
-            <p style={{ width: "50%",textTransform:"capitalize" }}>{pieza?.descripcion}</p>
+            <p
+              style={{ width: "50%", textTransform: "capitalize", margin: 10 }}
+            >
+              {pieza?.descripcion}
+            </p>
             <div className="flex flex-wrap gap-2">
               <Button
                 style={{ height: "50%", alignSelf: "center" }}
@@ -99,42 +156,66 @@ export default function View() {
                 <label style={{ display: "inline-block", width: widthLabel }}>
                   Orden:{" "}
                 </label>
-                <InputText defaultValue={pieza?.orden} />
+                <InputText
+                  type="text"
+                  value={orden}
+                  onChange={(e) => setOrden(String(e.target.value))}
+                />
               </span>
               <br />
               <span>
                 <label style={{ display: "inline-block", width: widthLabel }}>
                   Codigo:{" "}
                 </label>
-                <InputText defaultValue={pieza?.codigo} />
+                <InputText
+                  type="text"
+                  value={codigo}
+                  onChange={(e) => setCodigo(e.target.value)}
+                />
               </span>
               <br />
               <span>
                 <label style={{ display: "inline-block", width: widthLabel }}>
                   Numero de Pieza:{" "}
                 </label>
-                <InputText defaultValue={pieza?.numero_pieza} />
+                <InputText
+                  value={String(numeroPieza)}
+                  type="text"
+                  onChange={(e) => setNumeroPieza(e.target.value)}
+                />
               </span>
               <br />
               <span>
                 <label style={{ display: "inline-block", width: widthLabel }}>
                   Descripcion:{" "}
                 </label>
-                <InputText defaultValue={pieza?.descripcion} />
+                <InputText
+                  value={descripcion}
+                  type="text"
+                  onChange={(e) => setDescripcion(e.target.value)}
+                />
               </span>
               <br />
               <span>
                 <label style={{ display: "inline-block", width: widthLabel }}>
                   Cantidad:{" "}
                 </label>
-                <InputText defaultValue={pieza?.cantidad} />
+                <InputNumber
+                  value={cantidad}
+                  type="text"
+                  onChange={(e) => setCantidad(Number(e.value))}
+                />
               </span>
               <br />
               <span>
                 <label style={{ display: "inline-block", width: widthLabel }}>
                   Estado:{" "}
                 </label>
-                <InputText defaultValue={pieza?.estado} />
+                <Dropdown
+                  value={estado}
+                  onChange={(e: DropdownChangeEvent) => setEstado(e.value)}
+                  options={estados}
+                />
               </span>
               <br />
               <span>
@@ -142,11 +223,10 @@ export default function View() {
                   Area:{" "}
                 </label>
                 <Dropdown
-            value={area}
-            onChange={(e: DropdownChangeEvent) => setArea(e.value)}
-            options={areas}
-            placeholder="Area..."
-          />
+                  value={area}
+                  onChange={(e: DropdownChangeEvent) => setArea(e.value)}
+                  options={areas}
+                />
               </span>
               <br />
               <span>
@@ -156,7 +236,8 @@ export default function View() {
                 <InputText
                   style={{ width: "216px" }}
                   type="date"
-                  defaultValue={pieza?.fecha_entrada}
+                  value={fechaEntrada}
+                  onChange={(e) => setFechaEntrada(e.target.value)}
                 />
               </span>
               <br />
@@ -167,7 +248,8 @@ export default function View() {
                 <InputText
                   style={{ width: "216px" }}
                   type="date"
-                  defaultValue={pieza?.fecha_salida}
+                  onChange={(e) => setFechaSalida(e.target.value)}
+                  value={fechaSalida}
                 />
               </span>
               <br />
@@ -175,18 +257,33 @@ export default function View() {
                 <label style={{ display: "inline-block", width: widthLabel }}>
                   Observaciones:{" "}
                 </label>
-                <InputText defaultValue={pieza?.observaciones} />
+                <InputText
+                  type="text"
+                  value={observaciones??""}
+                  onChange={(e) => setObservaciones(e.target.value)}
+                />
               </span>
               <br />
             </>
           ) : (
             <>
-            {propiedades.map(property => (
-              <p style={{fontWeight:"bold", fontSize:25,margin:5,textTransform:"capitalize"}} key={property}>
-                {property}: <span style={{fontWeight:"normal"}}>{String(pieza?.[property as keyof PartDraw])}</span>
-              </p>
-            ))}
-          </>
+              {propiedades.map((property) => (
+                <p
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 25,
+                    margin: 5,
+                    textTransform: "capitalize",
+                  }}
+                  key={property}
+                >
+                  {property}:{" "}
+                  <span style={{ fontWeight: "normal" }}>
+                    {String(pieza?.[property as keyof PartDraw])}
+                  </span>
+                </p>
+              ))}
+            </>
           )}
         </div>
         <div className="col">

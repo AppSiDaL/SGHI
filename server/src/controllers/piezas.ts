@@ -71,7 +71,16 @@ router.delete(
 router.put("/:id", async (req: Request, res: Response) => {
   const pieza = await Pieza.findByPk(req.params.id);
   if (pieza !== null && pieza !== undefined) {
+    console.log(req.body);
     pieza.area = req.body.area;
+    const fechaEntrada = new Date(req.body.fecha_entrada as string);
+    const fechaSalida = new Date(req.body.fecha_salida as string);
+    const dias =
+      Math.abs(fechaSalida.getTime() - fechaEntrada.getTime()) /
+      (1000 * 60 * 60 * 24);
+    pieza.fecha_entrada = req.body.fecha_entrada;
+    pieza.fecha_salida = req.body.fecha_salida;
+    pieza.dias = dias;
     await pieza.save();
     res.json(pieza);
   } else {

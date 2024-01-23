@@ -61,7 +61,15 @@ router.delete("/:id", middleware.userExtractor, (req, res) => __awaiter(void 0, 
 router.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pieza = yield Pieza.findByPk(req.params.id);
     if (pieza !== null && pieza !== undefined) {
+        console.log(req.body);
         pieza.area = req.body.area;
+        const fechaEntrada = new Date(req.body.fecha_entrada);
+        const fechaSalida = new Date(req.body.fecha_salida);
+        const dias = Math.abs(fechaSalida.getTime() - fechaEntrada.getTime()) /
+            (1000 * 60 * 60 * 24);
+        pieza.fecha_entrada = req.body.fecha_entrada;
+        pieza.fecha_salida = req.body.fecha_salida;
+        pieza.dias = dias;
         yield pieza.save();
         res.json(pieza);
     }
