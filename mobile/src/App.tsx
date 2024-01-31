@@ -5,6 +5,8 @@ import Piezas from './screens/Piezas/Index'
 import Scanner from './screens/QrScaner/Index'
 import { Ionicons } from '@expo/vector-icons'
 import Calculadora from './screens/Calculadora/Index'
+import 'react-native-reanimated'
+import 'react-native-gesture-handler'
 
 const Tab = createBottomTabNavigator()
 

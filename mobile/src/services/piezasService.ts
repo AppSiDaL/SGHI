@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { type Part } from '../types/piezas'
-const url: string = 'https://sgh-iusa.onrender.com/api/piezas'
+const url: string = 'https://sghi.up.railway.app/api/piezas'
 
 let token: any = null
 

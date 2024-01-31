@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { Text } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 
 interface QRScannerProps {
@@ -16,8 +16,7 @@ interface QRScannerProps {
 
 export default function QrScaner ({
   handleBarCodeScanned,
-  scanned,
-  setScanned
+  scanned
 }: QRScannerProps): JSX.Element {
   const [hasPermission, setHasPermission] = useState(false)
 
@@ -42,7 +41,7 @@ export default function QrScaner ({
   return (
     <BarCodeScanner
       onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-      style={StyleSheet.absoluteFillObject}
+      style={{ height: '100%', width: '100%' }}
     />
   )
 }

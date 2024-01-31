@@ -1,11 +1,10 @@
-import { Button, Card, Input, Text } from '@rneui/themed'
-import React, { useState } from 'react'
-import { Alert, Modal, StyleSheet, View } from 'react-native'
-import { Entypo } from '@expo/vector-icons'
+import React, { useEffect, useState } from 'react'
+import { Alert, View } from 'react-native'
 import { type Part } from '../../types/piezas'
 import DropDownAreas from './DropDownAreas'
 import { useMutation, useQueryClient } from 'react-query'
 import piezasService from '../../services/piezasService'
+import { Portal, Text, Modal, Chip, Button } from 'react-native-paper'
 
 interface EditPiezaModalProps {
   pieza: Part | null
@@ -18,11 +17,11 @@ export default function EditPiezaModal ({
   visible,
   setVisible
 }: EditPiezaModalProps): JSX.Element {
-  const [area, setArea] = useState<string | null>(null)
+  const [area, setArea] = useState<string | undefined>(undefined)
   const queryClient = useQueryClient()
-  console.log(pieza)
   const mutation = useMutation(
-    async (newPart: any) => await piezasService.changePart(newPart.id as number, newPart),
+    async (newPart: any) =>
+      await piezasService.changePart(newPart.id as number, newPart),
     {
       onSuccess: async (data: any) => {
         Alert.alert('Pieza actualizada')
@@ -39,113 +38,111 @@ export default function EditPiezaModal ({
     const modifiedPart = { ...pieza, area }
     mutation.mutate(modifiedPart)
   }
-  const closeModal = (): void => {
-    setVisible(!visible)
-  }
-
+  useEffect(() => {
+    if (pieza !== null) {
+      setArea(pieza.area)
+    }
+  }, [pieza])
   return (
-    <View style={styles.centeredView}>
+    <Portal>
       <Modal
-        animationType="slide"
-        transparent={true}
         visible={visible}
-        onRequestClose={() => {
+        onDismiss={() => {
           setVisible(!visible)
         }}
+        contentContainerStyle={{
+          backgroundColor: 'white',
+          marginTop: 'auto',
+          marginBottom: 20,
+          padding: 20,
+          borderRadius: 10
+        }}
       >
-        <Card>
-          <Text h4>Pieza ID: {pieza?.id}</Text>
-          <Text>OT: {pieza?.orden}</Text>
-          <Text>Codigo: {pieza?.codigo}</Text>
-          <Text style={{ fontWeight: 'bold' }}>{pieza?.descripcion}</Text>
-          <Text>{pieza?.cantidad} Pzas</Text>
-          <Text style={{ textTransform: 'capitalize' }}>{pieza?.estado}</Text>
-          <Text>{pieza?.fecha_entrada}</Text>
-          <Input
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%'
+          }}
+        >
+          <Text
+            style={{
+              color: 'grey',
+              textTransform: 'capitalize',
+              flex: 1,
+              textAlign: 'left'
+            }}
+          >
+            {pieza?.orden}
+          </Text>
+          <Text
             style={{
               textTransform: 'capitalize',
-              marginTop: 20,
-              textAlign: 'center'
+              flex: 1,
+              textAlign: 'center',
+              fontWeight: 'bold'
             }}
-            placeholder={pieza?.area}
-            value={pieza?.area}
-            disabled
-          />
-          <Entypo
-            style={{ textAlign: 'center' }}
-            name="select-arrows"
-            size={24}
-            color="black"
-          />
-          <DropDownAreas setValue={setArea} value={area} />
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
-            <Button radius={'sm'} type="solid" onPress={savePieza}>
-              Guardar
-              <Entypo
-                style={{ textAlign: 'center' }}
-                name="save"
-                size={24}
-                color="white"
-              />
-            </Button>
-            <Button radius={'sm'} type="solid" onPress={closeModal} color="red">
-              Descartar
-              <Entypo
-                style={{ textAlign: 'center' }}
-                name="trash"
-                size={24}
-                color="white"
-              />
-            </Button>
-          </View>
-        </Card>
+            {pieza?.descripcion}
+          </Text>
+          <Text
+            style={{
+              color: 'grey',
+              textTransform: 'capitalize',
+              flex: 1,
+              textAlign: 'right'
+            }}
+          >
+            {pieza?.codigo + ' -|- #' + pieza?.numero_pieza}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%'
+          }}
+        >
+          <Chip
+            selectedColor="blue"
+            mode="outlined"
+            textStyle={{ textTransform: 'capitalize' }}
+          >
+            {pieza?.estado}
+          </Chip>
+          <Text>{pieza?.cantidad}</Text>
+          <Text>{pieza?.fecha_entrada}</Text>
+        </View>
+        <DropDownAreas value={area} setValue={setArea} />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%'
+          }}
+        >
+          <Button
+            icon="content-save"
+            mode="outlined"
+            textColor="green"
+            onPress={() => {
+              savePieza()
+            }}
+          >
+            Guardar
+          </Button>
+          <Button
+            icon="delete"
+            mode="outlined"
+            textColor="red"
+            onPress={() => {
+              setVisible(!visible)
+            }}
+          >
+            Descartar
+          </Button>
+        </View>
       </Modal>
-    </View>
+    </Portal>
   )
 }
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF'
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3'
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center'
-  }
-})

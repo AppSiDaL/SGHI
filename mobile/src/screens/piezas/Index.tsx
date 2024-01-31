@@ -1,62 +1,75 @@
 import { useQuery } from 'react-query'
 import piezasService from '../../services/piezasService'
-import { Text, View } from 'react-native'
-import TableComponent from '../../components/Table/Index'
-import TableSkeleton from '../../components/Table/TableSkeleton'
-import React from 'react'
+import { Pressable, ScrollView } from 'react-native'
+import React, { useEffect } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import PiezaCard from '../../components/PiezaCard/Index'
+import { type Part } from '../../types/piezas'
+import Head from '../../components/Head'
+import { Searchbar } from 'react-native-paper'
+import Skeleton from '../../components/PiezaCard/Skeleton'
+import EditPiezaModal from '../../components/QrScanner/EditPiezaModal'
 
 export default function Index (): JSX.Element {
-  const titles = ['Orden', 'Code', 'Descrip.', 'Qt', 'Area']
-
-  const {
-    data: piezas,
-    error,
-    isLoading
-  } = useQuery('piezas', async () =>
-    await piezasService.getItems().then((response) => {
-      return response.data
-    })
+  const [searchQuery, setSearchQuery] = React.useState('')
+  const [visible, setVisible] = React.useState(false)
+  const [pieza, setPieza] = React.useState<Part | null>(null)
+  const [piezasFiltered, setPiezasFiltered] = React.useState<Part[] | null>(
+    null
   )
+  const { data: piezas, isLoading } = useQuery<Part[]>(
+    'piezas',
+    async () =>
+      await piezasService.getItems().then((response) => {
+        return response.data
+      })
+  )
+
+  useEffect(() => {
+    setPiezasFiltered(piezas ?? null)
+  }, [piezas])
 
   if (isLoading) {
     return (
-      <>
-        <View
-          style={{
-            paddingTop: 40,
-            backgroundColor: '#2C70DB',
-            alignItems: 'center',
-            height: 70,
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-          }}
-        >
-          <Text style={{ color: 'white', marginLeft: 15 }}>Piezas</Text>
-        </View>
-        <TableSkeleton />
-      </>
+      <SafeAreaView>
+        <Head title="Piezas" />
+        <Skeleton />
+      </SafeAreaView>
     )
   }
 
-  if (error !== undefined) {
-    return <Text>An error has occurred: {(error as Error).message}</Text>
+  const handleFilter = (query: string): void => {
+    setSearchQuery(query)
+    const piezasFiltered = piezas?.filter((pieza) =>
+      pieza.descripcion.toLowerCase().includes(query.toLowerCase())
+    )
+    setPiezasFiltered(piezasFiltered ?? null)
   }
-
+  const handlePiezaPress = (pieza: Part): void => {
+    setPieza(pieza)
+    setVisible(true)
+  }
   return (
-    <>
-      <View
-        style={{
-          paddingTop: 40,
-          backgroundColor: '#2C70DB',
-          alignItems: 'center',
-          height: 70,
-          flexDirection: 'row',
-          justifyContent: 'space-between'
-        }}
-      >
-        <Text style={{ color: 'white', marginLeft: 15 }}>Piezas</Text>
-      </View>
-      <TableComponent piezas={piezas} titles={titles} />
-    </>
+    <SafeAreaView>
+      <Head title="Piezas" />
+      <Searchbar
+        placeholder="Search"
+        onChangeText={handleFilter}
+        value={searchQuery}
+      />
+      <EditPiezaModal visible={visible} setVisible={setVisible} pieza={pieza} />
+      <ScrollView>
+        {piezasFiltered?.map((pieza: Part) => (
+          <Pressable
+            key={pieza.id}
+            onPress={() => {
+              handlePiezaPress(pieza)
+            }}
+          >
+            <PiezaCard pieza={pieza} />
+          </Pressable>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
   )
 }

@@ -21,8 +21,8 @@ const data = [
 ]
 
 interface dropDownAreasProps {
-  value: string | null
-  setValue: React.Dispatch<React.SetStateAction<string | null>>
+  value: string | undefined
+  setValue: React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
 export default function DropDownAreas ({ value, setValue }: dropDownAreasProps): JSX.Element {
@@ -52,7 +52,7 @@ export default function DropDownAreas ({ value, setValue }: dropDownAreasProps):
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? 'Area' : '...'}
+        placeholder={!isFocus ? value : '...'}
         value={value}
         onFocus={() => { setIsFocus(true) }}
         onBlur={() => { setIsFocus(false) }}
