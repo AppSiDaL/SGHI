@@ -38,6 +38,13 @@ const removeItem = async (items: Part[]): Promise<any> => {
   })
   return await Promise.all(deleteRequests)
 }
+const updateItem = async (id: string, pieza: newPart): Promise<any> => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  const request = await axios.put(`${url}/${id}`, pieza, config)
+  return request.data
+}
 
 export default {
   getItems,
@@ -45,5 +52,6 @@ export default {
   name: 'Pieza',
   createItem,
   removeItem,
+  updateItem,
   getItem
 }

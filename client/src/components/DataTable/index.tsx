@@ -15,9 +15,9 @@ import { type Orden } from '../../types/orden'
 import { type MenuItem } from 'primereact/menuitem'
 import { SplitButton } from 'primereact/splitbutton'
 import { type ServiceProps } from '../../types/service'
-import EditDialogPiezas from './EditDialogPiezas'
-import EditDialogOrdenes from './EditDialogOrdenes'
-import EditDialogHerramientas from './EditDialogHerramientas'
+import EditDialogPiezas from './NewDialogPiezas'
+import EditDialogOrdenes from './NewDialogOrdenes'
+import EditDialogHerramientas from './NewDialogHerramientas'
 import { useNavigate } from 'react-router-dom'
 import { type Movimiento } from '../../types/movimientos'
 
@@ -344,6 +344,7 @@ export default function DataTableComponent ({
                 setProductDialog={setProductDialog}
                 productDialog={productDialog}
                 submitted={submitted}
+                toast={toast}
               />
             )
           default:
