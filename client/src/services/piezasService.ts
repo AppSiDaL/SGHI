@@ -5,7 +5,7 @@ const url = baseURL + '/piezas'
 
 let token: any = null
 
-const setToken = async (newToken: string): Promise<any> => {
+const setToken = (newToken: string): void => {
   token = `Bearer ${newToken}`
 }
 

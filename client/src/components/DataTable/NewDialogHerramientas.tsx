@@ -1,69 +1,94 @@
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { classNames } from "primereact/utils";
-import React, {  useState } from "react";
-import { FileUpload } from "primereact/fileupload";
-import { Toast } from "primereact/toast";
-import herramientasService from "../../services/herramientasService";
+import { Button } from 'primereact/button'
+import { Dialog } from 'primereact/dialog'
+import { InputText } from 'primereact/inputtext'
+import { InputTextarea } from 'primereact/inputtextarea'
+import { classNames } from 'primereact/utils'
+import React, { useState } from 'react'
+import { FileUpload, type FileUploadHandlerEvent } from 'primereact/fileupload'
+import { type Toast } from 'primereact/toast'
+import herramientasService from '../../services/herramientasService'
+import axios from 'axios'
 
 interface EditDialogProps {
-  setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-  setProductDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  productDialog: boolean;
-  submitted: boolean;
-  toast: React.RefObject<Toast>;
+  setSubmitted: React.Dispatch<React.SetStateAction<boolean>>
+  setProductDialog: React.Dispatch<React.SetStateAction<boolean>>
+  productDialog: boolean
+  submitted: boolean
+  toast: React.RefObject<Toast>
 }
 
-export default function EditDialogPiezas({
+export default function EditDialogPiezas ({
   setSubmitted,
   toast,
   setProductDialog,
   productDialog,
-  submitted,
-}: EditDialogProps) {
-  const [numeroPieza, setNumeroPieza] = useState<string>("");
-  const [codigo, setCodigo] = useState<string>("");
-  const [descripcion, setDescripcion] = useState<string>("");
-  const [response, setResponse] = useState<object>({});
+  submitted
+}: EditDialogProps): JSX.Element {
+  const [numeroPieza, setNumeroPieza] = useState<string>('')
+  const [codigo, setCodigo] = useState<string>('')
+  const [descripcion, setDescripcion] = useState<string>('')
+  const [response, setResponse] = useState<object>({})
 
   const hideDialog = () => {
-    setSubmitted(false);
-    setProductDialog(false);
-  };
+    setSubmitted(false)
+    setProductDialog(false)
+  }
   const saveHerramienta = () => {
     const data = {
       numero_pieza: numeroPieza,
-      codigo: codigo,
-      descripcion: descripcion,
-      dibujo: (response as any).url_preview,
-    };
+      codigo,
+      descripcion,
+      dibujo: (response as any).url_preview
+    }
     herramientasService.createItem(data).then((res) => {
       console.log(res)
-      hideDialog();
+      hideDialog()
       toast.current?.show({
-        severity: "success",
-        summary: "Exito",
-        detail: "Herramienta Creada",
-        life: 3000,
-      });
-    }).catch((err) => {console.log(err)});
-  };
+        severity: 'success',
+        summary: 'Exito',
+        detail: 'Herramienta Creada',
+        life: 3000
+      })
+    }).catch((err) => { console.log(err) })
+  }
   const productDialogFooter = (
     <React.Fragment>
       <Button label="Cancel" icon="pi pi-times" outlined onClick={hideDialog} />
       <Button label="Save" icon="pi pi-check" onClick={saveHerramienta} />
     </React.Fragment>
-  );
-  const urlDisplay = response ? (
+  )
+  const urlDisplay = response
+    ? (
     <p className="text-green-500">{(response as any).message}</p>
-  ) : null;
+      )
+    : null
+  const customUpload = async (event: FileUploadHandlerEvent): Promise<void> => {
+    const file = event.files[0]
+    const formData = new FormData()
+
+    formData.append('file', file)
+    formData.append('codigo', codigo)
+
+    const response = await fetch('http://localhost:3001/api/herramientas/upload', {
+      method: 'POST',
+      body: formData
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      console.log('Archivo subido con éxito')
+      console.log(data)
+      setResponse((data.response))
+    } else {
+      console.log('Error al subir el archivo')
+    }
+  }
+
   return (
     <Dialog
       visible={productDialog}
-      style={{ width: "32rem" }}
-      breakpoints={{ "960px": "75vw", "641px": "90vw" }}
+      style={{ width: '32rem' }}
+      breakpoints={{ '960px': '75vw', '641px': '90vw' }}
       header="Herramienta"
       modal
       className="p-fluid"
@@ -78,11 +103,11 @@ export default function EditDialogPiezas({
           <InputText
             id="orden"
             value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
+            onChange={(e) => { setCodigo(e.target.value) }}
             required
             autoFocus
             className={classNames({
-              "p-invalid": submitted && !codigo,
+              'p-invalid': submitted && !codigo
             })}
           />
           {submitted && !codigo && (
@@ -96,11 +121,11 @@ export default function EditDialogPiezas({
           <InputText
             id="codigo"
             value={numeroPieza}
-            onChange={(e) => setNumeroPieza(e.target.value)}
+            onChange={(e) => { setNumeroPieza(e.target.value) }}
             required
             autoFocus
             className={classNames({
-              "p-invalid": submitted && !numeroPieza,
+              'p-invalid': submitted && !numeroPieza
             })}
           />
           {submitted && !numeroPieza && (
@@ -115,7 +140,7 @@ export default function EditDialogPiezas({
         <InputTextarea
           id="descripcion"
           value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
+          onChange={(e) => { setDescripcion(e.target.value) }}
           required
           rows={2}
           cols={10}
@@ -127,14 +152,12 @@ export default function EditDialogPiezas({
         </label>
         <FileUpload
           name="file"
-          url={"http://localhost:3001/api/herramientas/upload"}
+          url={'http://localhost:3001/api/herramientas/upload'}
           multiple
           accept="pdf/*"
           maxFileSize={1000000}
-          onUpload={(e) => {
-            const response = JSON.parse(e.xhr.response);
-            setResponse(response.response);
-          }}
+          customUpload
+          uploadHandler={customUpload}
           cancelLabel="Cancelar"
           uploadLabel="Subir"
           chooseLabel="Seleccionar"
@@ -147,5 +170,5 @@ export default function EditDialogPiezas({
         />
       </div>
     </Dialog>
-  );
+  )
 }

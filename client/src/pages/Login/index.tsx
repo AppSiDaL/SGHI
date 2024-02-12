@@ -1,44 +1,45 @@
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
-import BG from "../../assets/LoginBG.webp";
-import { useState } from "react";
-import loginService from "../../services/loginService";
-import { useNavigate } from "react-router-dom";
-import piezasService from "../../services/piezasService";
-import herramientasService from "../../services/herramientasService";
-import ordenesService from "../../services/ordenesService";
+import React from 'react'
+import { Button } from 'primereact/button'
+import { InputText } from 'primereact/inputtext'
+import BG from '../../assets/LoginBG.webp'
+
+import loginService from '../../services/loginService'
+import { useNavigate } from 'react-router-dom'
+import piezasService from '../../services/piezasService'
+import herramientasService from '../../services/herramientasService'
+import ordenesService from '../../services/ordenesService'
 const containerStyles = {
   backgroundImage: `url(${BG})`,
-  backgroundSize: "cover",
-  height: "100vh",
-  alignItems: "center",
-  justifyContent: "center",
-};
+  backgroundSize: 'cover',
+  height: '100vh',
+  alignItems: 'center',
+  justifyContent: 'center'
+}
 interface loginProps {
-  setUser: any;
+  setUser: any
 }
 
-export default function Index({ setUser }: loginProps) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const navigator = useNavigate();
-  const login = async () => {
+export default function Index ({ setUser }: loginProps): JSX.Element {
+  const [username, setUsername] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const navigator = useNavigate()
+  const login = async (): Promise<void> => {
     try {
       const response = await loginService.loginUser({
         user: username,
-        password,
-      });
-      console.log(response);
-      piezasService.setToken(response.token);
-      herramientasService.setToken(response.token);
-      ordenesService.setToken(response.token);
-      window.localStorage.setItem("loggedUser", JSON.stringify(response));
-      setUser(response);
-      navigator("/piezas");
+        password
+      })
+      console.log(response)
+      piezasService.setToken((response.token as string))
+      herramientasService.setToken((response.token as string))
+      ordenesService.setToken((response.token as string))
+      window.localStorage.setItem('loggedUser', JSON.stringify(response))
+      setUser(response)
+      navigator('/piezas')
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   return (
     <div className="flex items-center justify-center" style={containerStyles}>
@@ -58,8 +59,8 @@ export default function Index({ setUser }: loginProps) {
             placeholder="Usuario"
             className="w-full mb-3"
             onInput={(e) => {
-              const target = e.target as HTMLInputElement;
-              setUsername(target.value);
+              const target = e.target as HTMLInputElement
+              setUsername(target.value)
             }}
           />
 
@@ -71,8 +72,8 @@ export default function Index({ setUser }: loginProps) {
             type="password"
             placeholder="Contraseña"
             onInput={(e) => {
-              const target = e.target as HTMLInputElement;
-              setPassword(target.value);
+              const target = e.target as HTMLInputElement
+              setPassword(target.value)
             }}
             className="w-full mb-3"
           />
@@ -93,5 +94,5 @@ export default function Index({ setUser }: loginProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }

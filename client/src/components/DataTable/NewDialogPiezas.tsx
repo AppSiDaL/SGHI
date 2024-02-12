@@ -1,41 +1,41 @@
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { InputNumber } from "primereact/inputnumber";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { classNames } from "primereact/utils";
-import React, { useState } from "react";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import piezasService from "../../services/piezasService";
+import { Button } from 'primereact/button'
+import { Dialog } from 'primereact/dialog'
+import { InputNumber } from 'primereact/inputnumber'
+import { InputText } from 'primereact/inputtext'
+import { InputTextarea } from 'primereact/inputtextarea'
+import { classNames } from 'primereact/utils'
+import React, { useState } from 'react'
+import { Dropdown, type DropdownChangeEvent } from 'primereact/dropdown'
+import piezasService from '../../services/piezasService'
 
 interface EditDialogProps {
-  setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-  setProductDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  productDialog: boolean;
-  submitted: boolean;
+  setSubmitted: React.Dispatch<React.SetStateAction<boolean>>
+  setProductDialog: React.Dispatch<React.SetStateAction<boolean>>
+  productDialog: boolean
+  submitted: boolean
 }
 
-export default function EditDialogPiezas({
+export default function EditDialogPiezas ({
   setSubmitted,
   setProductDialog,
   productDialog,
-  submitted,
+  submitted
 }: EditDialogProps) {
-  const [orden, setOrden] = useState<number>(0);
-  const [codigo, setCodigo] = useState<string>("");
-  const [numeroPieza, setNumeroPieza] = useState<string>("");
-  const [descripcion, setDescripcion] = useState<string>("");
-  const [cantidad, setCantidad] = useState<number>(0);
-  const [estado, setEstado] = useState<string>("");
-  const [area, setArea] = useState<string>("");
-  const [entrada, setEntrada] = useState<string>("");
-  const [salida, setSalida] = useState<string>("");
-  const [observaciones, setObservaciones] = useState<string>("");
+  const [orden, setOrden] = useState<number>(0)
+  const [codigo, setCodigo] = useState<string>('')
+  const [numeroPieza, setNumeroPieza] = useState<string>('')
+  const [descripcion, setDescripcion] = useState<string>('')
+  const [cantidad, setCantidad] = useState<number>(0)
+  const [estado, setEstado] = useState<string>('')
+  const [area, setArea] = useState<string>('')
+  const [entrada, setEntrada] = useState<string>('')
+  const [salida, setSalida] = useState<string>('')
+  const [observaciones, setObservaciones] = useState<string>('')
 
   const hideDialog = () => {
-    setSubmitted(false);
-    setProductDialog(false);
-  };
+    setSubmitted(false)
+    setProductDialog(false)
+  }
   const savePieza = async () => {
     const newPieza = {
       orden,
@@ -47,41 +47,41 @@ export default function EditDialogPiezas({
       area,
       fecha_entrada: entrada,
       fecha_salida: salida,
-      observaciones,
-    };
-    const response = await piezasService.createItem(newPieza);
-    console.log(response);
-    setSubmitted(true);
-  };
+      observaciones
+    }
+    const response = await piezasService.createItem(newPieza)
+    console.log(response)
+    setSubmitted(true)
+  }
   const productDialogFooter = (
     <React.Fragment>
       <Button label="Cancel" icon="pi pi-times" outlined onClick={hideDialog} />
       <Button label="Save" icon="pi pi-check" onClick={savePieza} />
     </React.Fragment>
-  );
+  )
 
-  const estados: any = ["procesando", "ajustando", "terminado"];
+  const estados: any = ['procesando', 'ajustando', 'terminado']
   const areas: any = [
-    "corte",
-    "tornos",
-    "fresas",
-    "temple",
-    "rectificado plano",
-    "rectificado cilindrico",
-    "rectificado vertical",
-    "fresas cnc",
-    "tornos cnc",
-    "edm hilo",
-    "edm penetracion",
-    "ajuste moldes",
-    "ajuste troqueles",
-    "calidad",
-  ];
+    'corte',
+    'tornos',
+    'fresas',
+    'temple',
+    'rectificado plano',
+    'rectificado cilindrico',
+    'rectificado vertical',
+    'fresas cnc',
+    'tornos cnc',
+    'edm hilo',
+    'edm penetracion',
+    'ajuste moldes',
+    'ajuste troqueles',
+    'calidad'
+  ]
   return (
     <Dialog
       visible={productDialog}
-      style={{ width: "32rem" }}
-      breakpoints={{ "960px": "75vw", "641px": "90vw" }}
+      style={{ width: '32rem' }}
+      breakpoints={{ '960px': '75vw', '641px': '90vw' }}
       header="Pieza"
       modal
       className="p-fluid"
@@ -96,11 +96,11 @@ export default function EditDialogPiezas({
           <InputNumber
             id="orden"
             value={orden}
-            onChange={(e) => setOrden(e.value ?? 0)}
+            onChange={(e) => { setOrden(e.value ?? 0) }}
             required
             autoFocus
             className={classNames({
-              "p-invalid": submitted && !orden,
+              'p-invalid': submitted && !orden
             })}
           />
           {submitted && !orden && (
@@ -114,11 +114,11 @@ export default function EditDialogPiezas({
           <InputText
             id="codigo"
             value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
+            onChange={(e) => { setCodigo(e.target.value) }}
             required
             autoFocus
             className={classNames({
-              "p-invalid": submitted && !codigo,
+              'p-invalid': submitted && !codigo
             })}
           />
           {submitted && !codigo && (
@@ -134,11 +134,11 @@ export default function EditDialogPiezas({
           <InputText
             id="#"
             value={numeroPieza.toString()}
-            onChange={(e) => setNumeroPieza(e.target.value)}
+            onChange={(e) => { setNumeroPieza(e.target.value) }}
             required
             autoFocus
             className={classNames({
-              "p-invalid": submitted && !numeroPieza,
+              'p-invalid': submitted && !numeroPieza
             })}
           />
           {submitted && !numeroPieza && (
@@ -152,11 +152,11 @@ export default function EditDialogPiezas({
           <InputNumber
             id="cantidad"
             value={cantidad}
-            onChange={(e) => setCantidad(e.value ?? 0)}
+            onChange={(e) => { setCantidad(e.value ?? 0) }}
             required
             autoFocus
             className={classNames({
-              "p-invalid": submitted && !cantidad,
+              'p-invalid': submitted && !cantidad
             })}
           />
           {submitted && !cantidad && (
@@ -171,7 +171,7 @@ export default function EditDialogPiezas({
         <InputTextarea
           id="descripcion"
           value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
+          onChange={(e) => { setDescripcion(e.target.value) }}
           required
           rows={2}
           cols={10}
@@ -185,7 +185,7 @@ export default function EditDialogPiezas({
           </label>
           <Dropdown
             value={estado}
-            onChange={(e: DropdownChangeEvent) => setEstado(e.value)}
+            onChange={(e: DropdownChangeEvent) => { setEstado(e.value) }}
             options={estados}
             placeholder="Estado..."
           />
@@ -196,7 +196,7 @@ export default function EditDialogPiezas({
           </label>
           <Dropdown
             value={area}
-            onChange={(e: DropdownChangeEvent) => setArea(e.value)}
+            onChange={(e: DropdownChangeEvent) => { setArea(e.value) }}
             options={areas}
             placeholder="Area..."
           />
@@ -212,7 +212,7 @@ export default function EditDialogPiezas({
             type="date"
             className="text-green-400 p-inputtext-sm"
             value={entrada}
-            onChange={(e) => setEntrada(e.target.value)}
+            onChange={(e) => { setEntrada(e.target.value) }}
           />
         </div>
         <div className="field col">
@@ -223,7 +223,7 @@ export default function EditDialogPiezas({
             type="date"
             className="text-red-400 p-inputtext-sm"
             value={salida}
-            onChange={(e) => setSalida(e.target.value)}
+            onChange={(e) => { setSalida(e.target.value) }}
           />
         </div>
       </div>
@@ -234,12 +234,12 @@ export default function EditDialogPiezas({
         <InputTextarea
           id="descripcion"
           value={observaciones}
-          onChange={(e) => setObservaciones(e.target.value)}
+          onChange={(e) => { setObservaciones(e.target.value) }}
           required
           rows={2}
           cols={10}
         />
       </div>
     </Dialog>
-  );
+  )
 }
