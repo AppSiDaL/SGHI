@@ -16,7 +16,7 @@ interface EditDialogProps {
   submitted: boolean
 }
 
-export default function EditDialogPiezas ({
+export default function BulkCreatePiezas ({
   setSubmitted,
   setProductDialog,
   productDialog,
@@ -128,126 +128,7 @@ export default function EditDialogPiezas ({
           )}
         </div>
       </div>
-      <div className="formgrid grid">
-        <div className="field col">
-          <label htmlFor="#" className="font-bold">
-            Numero Pieza
-          </label>
-          <InputText
-            id="#"
-            value={numeroPieza.toString()}
-            onChange={(e) => { setNumeroPieza(e.target.value) }}
-            required
-            autoFocus
-            className={classNames({
-              'p-invalid': submitted && !numeroPieza
-            })}
-          />
-          {submitted && !numeroPieza && (
-            <small className="p-error">numero_pieza requerido.</small>
-          )}
-        </div>
-        <div className="field col">
-          <label htmlFor="cantidad" className="font-bold">
-            Cantidad
-          </label>
-          <InputNumber
-            id="cantidad"
-            value={cantidad}
-            onChange={(e) => { setCantidad(e.value ?? 0) }}
-            required
-            autoFocus
-            className={classNames({
-              'p-invalid': submitted && !cantidad
-            })}
-          />
-          {submitted && !cantidad && (
-            <small className="p-error">Cantidad requerida.</small>
-          )}
-        </div>
-      </div>
-      <div className="field">
-        <label htmlFor="descripcion" className="font-bold">
-          Descripcion
-        </label>
-        <InputTextarea
-          id="descripcion"
-          value={descripcion}
-          onChange={(e) => { setDescripcion(e.target.value) }}
-          required
-          rows={2}
-          cols={10}
-        />
-      </div>
 
-      <div className="formgrid grid">
-        <div className="field col">
-          <label htmlFor="#" className="font-bold">
-            Estado
-          </label>
-          <Dropdown
-            value={estado}
-            onChange={(e: DropdownChangeEvent) => { setEstado(e.value) }}
-            options={estados}
-            placeholder="Estado..."
-          />
-        </div>
-        <div className="field col">
-          <label htmlFor="cantidad" className="font-bold">
-            Area
-          </label>
-          <Dropdown
-            value={area}
-            onChange={(e: DropdownChangeEvent) => { setArea(e.value) }}
-            options={areas}
-            placeholder="Area..."
-          />
-        </div>
-      </div>
-
-      <div className="formgrid grid">
-        <div className="field col">
-          <label htmlFor="price" className="font-bold">
-            Entrada
-          </label>
-          <InputText
-            type="date"
-            className="text-green-400 p-inputtext-sm"
-            value={entrada}
-            onChange={(e) => { setEntrada(e.target.value) }}
-          />
-        </div>
-        <div className="field col">
-          <label htmlFor="quantity" className="font-bold">
-            Salida
-          </label>
-          <InputText
-            type="date"
-            className="text-red-400 p-inputtext-sm"
-            value={salida}
-            onChange={(e) => { setSalida(e.target.value) }}
-          />
-        </div>
-      </div>
-      <div className="field">
-        <label htmlFor="descripcion" className="font-bold">
-          Observaciones
-        </label>
-        <InputTextarea
-          id="descripcion"
-          value={observaciones}
-          onChange={(e) => { setObservaciones(e.target.value) }}
-          required
-          rows={2}
-          cols={10}
-        />
-      </div>
-      <div className="field">
-        <label htmlFor="descripcion" className="font-bold">
-          Dibujo
-        </label>
-        <SelectDraw selectedDraw={selectedDraw} setSelectedDraw={setSelectedDraw}/>
-      </div>
     </Dialog>
   )
 }

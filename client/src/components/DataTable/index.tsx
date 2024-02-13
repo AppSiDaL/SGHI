@@ -20,15 +20,20 @@ import EditDialogOrdenes from './NewDialogOrdenes'
 import EditDialogHerramientas from './NewDialogHerramientas'
 import { useNavigate } from 'react-router-dom'
 import { type Movimiento } from '../../types/movimientos'
+import BulkCreatePiezas from './BulkCreatePiezas'
 
 interface DataTableComponentProps {
   items: Herramienta[] | Part[] | Orden[] | Movimiento[]
-  setItems: React.Dispatch<React.SetStateAction<Herramienta[] | Part[] | Orden[] | Movimiento[]>>
+  setItems: React.Dispatch<
+  React.SetStateAction<Herramienta[] | Part[] | Orden[] | Movimiento[]>
+  >
   columns: ColumnProps[]
   visiblePDF?: boolean
   setVisiblePDF?: React.Dispatch<React.SetStateAction<boolean>>
   item: Herramienta | Part | Orden | Movimiento
-  setItem: React.Dispatch<React.SetStateAction<Herramienta | Part | Orden | Movimiento>>
+  setItem: React.Dispatch<
+  React.SetStateAction<Herramienta | Part | Orden | Movimiento>
+  >
   service: ServiceProps
   emptyItem: Herramienta | Part | Orden | Movimiento
 }
@@ -44,6 +49,7 @@ export default function DataTableComponent ({
   emptyItem
 }: DataTableComponentProps): JSX.Element {
   const [productDialog, setProductDialog] = useState<boolean>(false)
+  const [bulk, setBulk] = useState<boolean>(false)
   const [deleteProductDialog, setDeleteProductDialog] =
     useState<boolean>(false)
   const [deleteProductsDialog, setDeleteProductsDialog] =
@@ -59,6 +65,11 @@ export default function DataTableComponent ({
     setItem(emptyItem)
     setSubmitted(false)
     setProductDialog(true)
+  }
+  const openBulk = (): void => {
+    setItem(emptyItem)
+    setSubmitted(false)
+    setBulk(true)
   }
 
   const hideDeleteProductDialog = (): void => {
@@ -80,21 +91,25 @@ export default function DataTableComponent ({
   }
 
   const deleteProduct = async (): Promise<void> => {
-    service.removeItem([item]).then((res) => {
-      if (res.error === false) {
-        const _products = items?.filter((val) => val.id !== item.id)
-        setItems(_products as Herramienta[])
-        setDeleteProductDialog(false)
-        setItem(emptyItem)
-        toast.current?.show({
-          severity: 'success',
-          summary: 'Operacion Exitosa',
-          detail: 'Eliminado',
-          life: 3000
-        })
-      }
-    }
-    ).catch((err) => { console.log(err) })
+    service
+      .removeItem([item])
+      .then((res) => {
+        if (res.error === false) {
+          const _products = items?.filter((val) => val.id !== item.id)
+          setItems(_products as Herramienta[])
+          setDeleteProductDialog(false)
+          setItem(emptyItem)
+          toast.current?.show({
+            severity: 'success',
+            summary: 'Operacion Exitosa',
+            detail: 'Eliminado',
+            life: 3000
+          })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const exportCSV = (): void => {
@@ -108,7 +123,9 @@ export default function DataTableComponent ({
   const deleteSelectedProducts = async (): Promise<void> => {
     const response = await service.removeItem(selectedProducts as any[])
     if (response.error === false) {
-      const _products = items?.filter((val) => selectedProducts.includes(val) === false)
+      const _products = items?.filter(
+        (val) => selectedProducts.includes(val) === false
+      )
       setItems(_products as Herramienta[])
       setDeleteProductsDialog(false)
       setSelectedProducts([])
@@ -132,6 +149,13 @@ export default function DataTableComponent ({
           onClick={openNew}
         />
         <Button
+          label="Bulk"
+          icon="pi pi-plus"
+          style={{ backgroundColor: '#00C200' }}
+          severity="success"
+          onClick={openBulk}
+        />
+        <Button
           label="Eliminar"
           icon="pi pi-trash"
           severity="danger"
@@ -149,14 +173,22 @@ export default function DataTableComponent ({
         icon: 'pi pi-file-pdf',
         command: () => {
           const exportColumns = [{ title: 'ads', dataKey: 'ads' }]
-          import('jspdf').then((jsPDF) => {
-            import('jspdf-autotable').then(() => {
-              // eslint-disable-next-line new-cap
-              const doc = new jsPDF.default('p', 'px', 'a4', true);
-              (doc as any).autoTable(exportColumns, items)
-              doc.save('products.pdf')
-            }).catch((err) => { console.log(err) })
-          }).catch((err) => { console.log(err) })
+          import('jspdf')
+            .then((jsPDF) => {
+              import('jspdf-autotable')
+                .then(() => {
+                  // eslint-disable-next-line new-cap
+                  const doc = new jsPDF.default('p', 'px', 'a4', true);
+                  (doc as any).autoTable(exportColumns, items)
+                  doc.save('products.pdf')
+                })
+                .catch((err) => {
+                  console.log(err)
+                })
+            })
+            .catch((err) => {
+              console.log(err)
+            })
         }
       },
       {
@@ -245,7 +277,9 @@ export default function DataTableComponent ({
         label="Yes"
         icon="pi pi-check"
         severity="danger"
-        onClick={() => { void deleteProduct() }}
+        onClick={() => {
+          void deleteProduct()
+        }}
       />
     </React.Fragment>
   )
@@ -261,7 +295,9 @@ export default function DataTableComponent ({
         label="Yes"
         icon="pi pi-check"
         severity="danger"
-        onClick={() => { void deleteSelectedProducts() }}
+        onClick={() => {
+          void deleteSelectedProducts()
+        }}
       />
     </React.Fragment>
   )
@@ -321,12 +357,20 @@ export default function DataTableComponent ({
         switch (service.name) {
           case 'Pieza':
             return (
-              <EditDialogPiezas
-                setSubmitted={setSubmitted}
-                setProductDialog={setProductDialog}
-                productDialog={productDialog}
-                submitted={submitted}
-              />
+              <>
+                <EditDialogPiezas
+                  setSubmitted={setSubmitted}
+                  setProductDialog={setProductDialog}
+                  productDialog={productDialog}
+                  submitted={submitted}
+                />
+                <BulkCreatePiezas
+                  setSubmitted={setSubmitted}
+                  setProductDialog={setBulk}
+                  productDialog={bulk}
+                  submitted={submitted}
+                />
+              </>
             )
           case 'Orden':
             return (
@@ -380,10 +424,10 @@ export default function DataTableComponent ({
             className="pi pi-exclamation-triangle mr-3"
             style={{ fontSize: '2rem' }}
           />
-            <span>
-              Estas seguro que quieres eliminar{' '}
-              <b>{(item as Herramienta).descripcion}</b>?
-            </span>
+          <span>
+            Estas seguro que quieres eliminar{' '}
+            <b>{(item as Herramienta).descripcion}</b>?
+          </span>
         </div>
       </Dialog>
 
@@ -401,7 +445,7 @@ export default function DataTableComponent ({
             className="pi pi-exclamation-triangle mr-3"
             style={{ fontSize: '2rem' }}
           />
-            <span>{`Estas seguro que quieres eliminar los ${typeof item} seleccionados?`}</span>
+          <span>{`Estas seguro que quieres eliminar los ${typeof item} seleccionados?`}</span>
         </div>
       </Dialog>
     </div>
