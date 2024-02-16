@@ -7,7 +7,6 @@ import React, { useState } from 'react'
 import { FileUpload, type FileUploadHandlerEvent } from 'primereact/fileupload'
 import { type Toast } from 'primereact/toast'
 import herramientasService from '../../services/herramientasService'
-import axios from 'axios'
 
 interface EditDialogProps {
   setSubmitted: React.Dispatch<React.SetStateAction<boolean>>

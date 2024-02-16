@@ -9,19 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const { Herramienta } = require("../models");
-const middleware = require("../middleware");
-const router = require("express").Router();
-const jwt = require("jsonwebtoken");
-const { Pieza } = require("../models");
-router.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const { Herramienta } = require('../models');
+const middleware = require('../middleware');
+const router = require('express').Router();
+const jwt = require('jsonwebtoken');
+const { Pieza } = require('../models');
+router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const piezas = yield Pieza.findAll();
     res.json(piezas);
 }));
-router.post("/", middleware.userExtractor, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/', middleware.userExtractor, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = jwt.verify(req.token, process.env.SECRET);
     if (decodedToken.username === undefined) {
-        return res.status(401).json({ error: "token invalid" });
+        return res.status(401).json({ error: 'token invalid' });
     }
     const fechaEntrada = new Date(req.body.fecha_entrada);
     const fechaSalida = new Date(req.body.fecha_salida);
@@ -31,13 +31,13 @@ router.post("/", middleware.userExtractor, (req, res) => __awaiter(void 0, void 
     const pieza = yield Pieza.create(newPieza);
     return res.status(201).json(pieza);
 }));
-router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pieza = yield Pieza.findByPk(req.params.id, {
         include: [
             {
-                model: Herramienta,
-            },
-        ],
+                model: Herramienta
+            }
+        ]
     });
     if (pieza !== null && pieza !== undefined) {
         res.status(200).json(pieza);
@@ -46,19 +46,19 @@ router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(404).end();
     }
 }));
-router.delete("/:id", middleware.userExtractor, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/:id', middleware.userExtractor, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = jwt.verify(req.token, process.env.SECRET);
     if (decodedToken.username === undefined) {
-        return res.status(401).json({ error: "token invalid" });
+        return res.status(401).json({ error: 'token invalid' });
     }
     const pieza = yield Pieza.findByPk(req.params.id);
     if (pieza !== null && pieza !== undefined) {
         yield pieza.destroy();
-        return res.status(200).json({ message: "Pieza eliminada" });
+        return res.status(200).json({ message: 'Pieza eliminada' });
     }
-    return res.status(400).json({ error: "Pieza no encontrada" });
+    return res.status(400).json({ error: 'Pieza no encontrada' });
 }));
-router.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pieza = yield Pieza.findByPk(req.params.id);
     if (pieza !== null && pieza !== undefined) {
         console.log(req.body);

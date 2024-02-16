@@ -19,7 +19,6 @@ const jwt = require('jsonwebtoken');
 const middleware = require('../middleware');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
-const publitio = new publitio_js_sdk_1.default('669h9nrnmMLBlDRmR66v', 'inh3NVD6Wx3vjLTPVJAytHX6S4wj2RDa');
 const { Herramienta } = require('../models');
 router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const herramientas = yield Herramienta.findAll();
@@ -72,16 +71,53 @@ router.post('/upload', upload.single('file'), (req, res) => __awaiter(void 0, vo
         return res.status(400).json({ error: 'No file provided' });
     }
     const fileBuffer = (0, fs_1.readFileSync)(file.path);
+    const publitio = new publitio_js_sdk_1.default('669h9nrnmMLBlDRmR66v', 'inh3NVD6Wx3vjLTPVJAytHX6S4wj2RDa');
+    console.log(req.body.codigo);
+    const name = req.body.codigo.replace(/-/g, '');
     publitio
-        .uploadFile(fileBuffer, 'file')
+        .call('/folders/list', 'GET', { parent_id: '3pffh14x' })
         .then((data) => {
-        res.json({
-            message: 'Archivo subido con éxito',
-            response: data
-        });
+        if (data.folders.find((folder) => folder.name === name)) {
+            const id = data.folders.find((folder) => folder.name === name).id;
+            publitio
+                .uploadFile(fileBuffer, 'file', { folder: id })
+                .then((data) => {
+                res.json({
+                    message: 'Archivo subido con éxito',
+                    response: data
+                });
+            })
+                .catch((error) => {
+                res.status(500).json({ error: error.message });
+            });
+        }
+        else {
+            publitio
+                .call('/folders/create', 'POST', {
+                parent_id: '3pffh14x',
+                name
+            })
+                .then((data) => {
+                console.log(data);
+                publitio
+                    .uploadFile(fileBuffer, 'file', { folder: name })
+                    .then((data) => {
+                    res.json({
+                        message: 'Archivo subido con éxito',
+                        response: data
+                    });
+                })
+                    .catch((error) => {
+                    res.status(500).json({ error: error.message });
+                });
+            })
+                .catch((error) => {
+                console.log(error);
+            });
+        }
     })
         .catch((error) => {
-        res.status(500).json({ error: error.message });
+        console.log(error);
     });
 }));
 module.exports = router;
