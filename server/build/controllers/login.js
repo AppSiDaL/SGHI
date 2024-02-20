@@ -14,9 +14,9 @@ const bcrypt = require('bcrypt');
 const loginRouter = require('express').Router();
 const User = require('../models/usuario');
 loginRouter.post('/', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
-    const { user, password } = request.body;
-    const userFinded = yield User.findOne({ user });
-    const passwordCorrect = userFinded === null ? false : yield bcrypt.compare(password, user.password);
+    const { username, password } = request.body;
+    const user = yield User.findOne({ username });
+    const passwordCorrect = user === null ? false : bcrypt.compare(password, user.password);
     if (user === null || passwordCorrect === false) {
         return response.status(401).json({
             error: 'invalid username or password'
