@@ -26,7 +26,7 @@ export default function Index ({ setUser }: loginProps): JSX.Element {
   const login = async (): Promise<void> => {
     try {
       const response = await loginService.loginUser({
-        user: username,
+        username,
         password
       })
       console.log(response)

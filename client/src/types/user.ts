@@ -1,4 +1,4 @@
 export interface credentials {
-  user: string
+  username: string
   password: string
 }
