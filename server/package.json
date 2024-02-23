@@ -8,7 +8,7 @@
     "start": "nodemon",
     "dev": "nodemon --exec ts-node src/index.ts",
     "seed": "ts-node src/seed.ts",
-    "build:client": "cd ../client && npm run build && cp -r dist ../server",
+    "build:client": "cd ../client && npm run build && xcopy /E /I /D dist ..\\server\\dist",
     "build": "tsc",
     "start:prod": "node build/index.js",
     "lint": "eslint --ext .ts src",
